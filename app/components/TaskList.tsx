@@ -7,10 +7,11 @@ type Props = {
 	tasks: Task[]
 	handleSelect: (id: string, isChecked: boolean) => void
 	handleDelete: (id: string) => void
+	openEditDialog: (task: Task) => void
 	isMultiSelect: boolean
 }
 
-export default function TaskList({ tasks, isMultiSelect, handleSelect, handleDelete }: Props) {
+export default function TaskList({ tasks, isMultiSelect, handleSelect, handleDelete, openEditDialog }: Props) {
 	return (
 		<Box width="100%">
 			<Stack rowGap={2.5}>
@@ -20,6 +21,7 @@ export default function TaskList({ tasks, isMultiSelect, handleSelect, handleDel
 						task={task}
 						handleSelect={handleSelect}
 						handleDelete={handleDelete}
+						openEditDialog={openEditDialog}
 						isMultiSelect={isMultiSelect}
 					/>
 				))}

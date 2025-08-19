@@ -3,13 +3,14 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import Wrapper from '@/components/Wrapper'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
-import { Task } from '@/lib/types'
+import { Priority, Task } from '@/lib/types'
 import { memo } from 'react'
 
 type Props = {
 	task: Task
 	handleSelect: (id: string, isChecked: boolean) => void
 	handleDelete: (id: string) => void
+	openEditDialog: (task: Task) => void
 	isMultiSelect: boolean
 }
 
@@ -17,7 +18,8 @@ export default memo(function TaskItem({
 	task: { id, title, description, priority, createdAt },
 	isMultiSelect,
 	handleSelect,
-  handleDelete
+	handleDelete,
+	openEditDialog,
 }: Props) {
 	return (
 		<Wrapper styles={{ p: 2 }}>
@@ -46,7 +48,10 @@ export default memo(function TaskItem({
 				</Box>
 				{!isMultiSelect && (
 					<Box display="flex" alignItems="center" gap={1}>
-						<IconButton size="small">
+						<IconButton
+							onClick={() => openEditDialog({ id, title, description, priority, createdAt })}
+							size="small"
+						>
 							<EditIcon color="secondary" />
 						</IconButton>
 						<IconButton onClick={() => handleDelete(id)} size="small">
@@ -59,31 +64,37 @@ export default memo(function TaskItem({
 	)
 })
 
-function TaskFooter({ priority, createdAt }: { priority: string; createdAt: Date }) {
+export function PriorityCircle({ priority }: { priority: Priority }) {
 	const getPriorityColor = (priority: string) => {
 		switch (priority) {
 			case 'High':
-				return 'rgb(239, 68, 68)'
+				return '#ef4444'
 			case 'Medium':
-				return 'rgb(234, 179, 8)'
+				return '#eab308'
 			case 'Low':
-				return 'rgb(34, 197, 94)'
+				return '#22c55e'
 			default:
-				return 'text.secondary' // Fallback, shouldn't happen
+				return '#6b7280'
 		}
 	}
 
 	return (
+		<Box
+			sx={{
+				width: 8,
+				height: 8,
+				borderRadius: '50%',
+				bgcolor: getPriorityColor(priority),
+			}}
+		/>
+	)
+}
+
+function TaskFooter({ priority, createdAt }: { priority: Priority; createdAt: Date }) {
+	return (
 		<Box display="flex" alignItems="center" gap={2} mt={0.25}>
 			<Box display="flex" alignItems="center" gap={0.75}>
-				<Box
-					sx={{
-						width: 8,
-						height: 8,
-						borderRadius: '50%',
-						bgcolor: getPriorityColor(priority),
-					}}
-				/>
+				<PriorityCircle priority={priority} />
 				<Typography variant="body2" color="text.secondary">
 					{priority}
 				</Typography>
