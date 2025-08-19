@@ -10,16 +10,20 @@ import {
 	SelectChangeEvent,
 	TextField,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
 import { Search as SearchIcon, FilterAltOutlined as FilterIcon } from '@mui/icons-material'
 import Wrapper from '@/components/Wrapper'
-import TaskDialog from './TaskDialog'
+import { PriorityFilter } from '@/lib/types'
 
-export default function ActionsBar() {
-	const [filter, setFilter] = useState('All')
+type Props = {
+	filter: PriorityFilter
+	onFilterChange: (value: PriorityFilter) => void
+	openAddTaskDialog: () => void
+}
 
+export default function ActionsBar({ filter, onFilterChange, openAddTaskDialog }: Props) {
 	const handleFilterChange = (e: SelectChangeEvent) => {
-		setFilter(e.target.value)
+		onFilterChange(e.target.value as PriorityFilter)
 	}
 
 	return (
@@ -33,11 +37,6 @@ export default function ActionsBar() {
 						size="small"
 						variant="outlined"
 						slotProps={{ input: { startAdornment: <SearchIcon sx={{ ml: 1, mr: 1 }} /> } }}
-						sx={{
-							'& .MuiOutlinedInput-root': {
-								height: '100%',
-							},
-						}}
 					/>
 				</Grid>
 
@@ -73,22 +72,11 @@ export default function ActionsBar() {
 
 				{/* Add Task Button */}
 				<Grid size={3}>
-					<Button
-						variant="contained"
-						size="small"
-						fullWidth
-						sx={{
-							py: 0.75,
-							fontSize: '0.9rem',
-							fontWeight: 'bold',
-							height: '100%',
-						}}
-					>
+					<Button onClick={openAddTaskDialog} variant="contained" size="small" fullWidth>
 						Add Task
 					</Button>
 				</Grid>
 			</Grid>
-			{/* <TaskDialog open={true} onClose={() => {}} onAdd={() => {}}/> */}
 		</Wrapper>
 	)
 }

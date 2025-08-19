@@ -9,3 +9,5 @@ export type Task = {
   priority: Priority
   createdAt: Date
 }
+
+export type PriorityFilter = 'All' | 'High' | 'Medium' | 'Low'
