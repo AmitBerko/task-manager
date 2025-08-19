@@ -2,8 +2,8 @@
 import { tasks } from '@/lib/data'
 import React, { useState } from 'react'
 import TaskItem from './TaskItem'
-import { Box, Button } from '@mui/material'
-import { CheckBoxOutlineBlank, DeleteOutline, Close } from '@mui/icons-material'
+import { Box, IconButton, Typography, Button, Stack } from '@mui/material'
+import { DeleteOutline, Close, SelectAll } from '@mui/icons-material'
 
 export default function TaskList() {
 	const [isMultiSelect, setIsMultiSelect] = useState(false)
@@ -23,78 +23,79 @@ export default function TaskList() {
 	}
 
 	return (
-		<>
+		<Box width="100%">
 			<Box
 				sx={{
 					display: 'flex',
-					gap: 2,
-          justifyContent: 'space-between',
-					width: '100%',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+					mb: 2,
 				}}
 			>
-        {/* Needs a big redesign */}
-				{!isMultiSelect ? (
-					<Button
-						variant="outlined"
-						startIcon={<CheckBoxOutlineBlank />}
-						onClick={handleMultiSelect}
-						sx={{
-							textTransform: 'none',
-							borderRadius: 1.5,
-						}}
-					>
-						Multi Select
-					</Button>
-				) : (
-					<>
+				<Typography
+					variant="h5"
+					sx={{
+						fontWeight: 'bold',
+					}}
+				>
+					My Tasks
+				</Typography>
 
-						<Button
-							variant="text"
-							startIcon={<Close />}
-							onClick={() => {
-                setTasksToDelete([])
-								setIsMultiSelect(false)
-							}}
+				<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+					{!isMultiSelect ? (
+						<IconButton
+							onClick={handleMultiSelect}
 							sx={{
-                textTransform: 'none',
 								color: 'text.secondary',
-								minWidth: 'auto',
-								px: 2,
 							}}
-              >
-							Cancel
-						</Button>
-            {tasksToDelete.length > 0 && (
-              <Button
-                variant="contained"
-                color="error"
-                startIcon={<DeleteOutline />}
-                onClick={handleBulkDelete}
-                sx={{
-                  textTransform: 'none',
-                  borderRadius: 1.5,
-                }}
-              >
-                Delete {tasksToDelete.length}
-              </Button>
-            )}
-					</>
-				)}
+						>
+							{/* Maybe add a tooltip later */}
+							<SelectAll />
+						</IconButton>
+					) : (
+						<>
+							<Button
+								variant="contained"
+								color="error"
+								startIcon={<DeleteOutline />}
+								onClick={handleBulkDelete}
+								disabled={tasksToDelete.length === 0}
+								sx={{
+									textTransform: 'none',
+									borderRadius: 2,
+								}}
+							>
+								Delete {tasksToDelete.length}
+							</Button>
+							<IconButton
+								onClick={() => {
+									setTasksToDelete([])
+									setIsMultiSelect(false)
+								}}
+								sx={{
+									color: 'text.secondary',
+								}}
+							>
+								<Close />
+							</IconButton>
+						</>
+					)}
+				</Box>
 			</Box>
-
-			{tasks.map((task) => (
-				<TaskItem
-					key={task.id}
-					id={task.id}
-					title={task.title}
-					description={task.description}
-					priority={task.priority}
-					createdAt={new Date()}
-					isMultiSelect={isMultiSelect}
-					handleCheck={handleCheck}
-				/>
-			))}
-		</>
+			<Stack rowGap={2.5}>
+				{tasks.map((task) => (
+					<TaskItem
+						key={task.id}
+						id={task.id}
+						title={task.title}
+						description={task.description}
+						priority={task.priority}
+						createdAt={task.createdAt}
+						isMultiSelect={isMultiSelect}
+						handleCheck={handleCheck}
+					/>
+				))}
+			</Stack>
+		</Box>
 	)
 }
-
