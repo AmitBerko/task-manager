@@ -1,16 +1,9 @@
-'use client'
-
-import { useThemeMode } from '@/contexts/ThemeModeProvider'
-import { Box, IconButton, Typography, useTheme } from '@mui/material'
-import DarkModeIcon from '@mui/icons-material/DarkMode'
-import LightModeIcon from '@mui/icons-material/LightMode'
+import { Box, Typography } from '@mui/material'
 import ChecklistIcon from '@mui/icons-material/Checklist'
 import React from 'react'
+import ThemeToggle from './ThemeToggle'
 
 export default function Header() {
-	const { mode, toggleThemeMode } = useThemeMode()
-	const theme = useTheme()
-
 	return (
 		<Box
 			sx={{
@@ -31,12 +24,13 @@ export default function Header() {
 						height: { xs: 44, sm: 52 },
 						borderRadius: '12px',
 						bgcolor: 'background.paper',
-						border: `1px solid ${theme.palette.divider}`,
+						border: '1px solid',
+						borderColor: 'divider',
 					}}
 				>
 					<ChecklistIcon
 						sx={{
-							color: theme.palette.primary.main,
+							color: 'primary.main',
 							fontSize: { xs: '1.2rem', sm: '1.5rem' },
 						}}
 					/>
@@ -52,33 +46,7 @@ export default function Header() {
 					Task Manager
 				</Typography>
 			</Box>
-
-			<IconButton
-				onClick={toggleThemeMode}
-				sx={{
-					width: { xs: 44, sm: 52 },
-					height: { xs: 44, sm: 52 },
-					borderRadius: '12px',
-					bgcolor: 'background.paper',
-					border: `1px solid ${theme.palette.divider}`,
-				}}
-			>
-				{mode === 'light' ? (
-					<DarkModeIcon
-						sx={{
-							fontSize: { xs: '1.3rem', sm: '1.5rem' },
-							color: 'black',
-						}}
-					/>
-				) : (
-					<LightModeIcon
-						sx={{
-							fontSize: { xs: '1.3rem', sm: '1.5rem' },
-							color: '#ffd711',
-						}}
-					/>
-				)}
-			</IconButton>
+			<ThemeToggle />
 		</Box>
 	)
 }
