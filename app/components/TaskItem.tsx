@@ -9,6 +9,7 @@ type Props = Task & {
 	isMultiSelect: boolean
 	handleCheck: (taskId: string, isChecked: boolean) => void
 }
+
 export default function TaskItem({
 	id,
 	title,
@@ -43,14 +44,16 @@ export default function TaskItem({
 					)}
 					<TaskFooter priority={priority} createdAt={createdAt} />
 				</Box>
-				<Box display="flex" alignItems="center" gap={1}>
-					<IconButton size="small">
-						<EditIcon color="secondary" />
-					</IconButton>
-					<IconButton size="small">
-						<DeleteIcon color="secondary" />
-					</IconButton>
-				</Box>
+				{!isMultiSelect && (
+					<Box display="flex" alignItems="center" gap={1}>
+						<IconButton size="small">
+							<EditIcon color="secondary" />
+						</IconButton>
+						<IconButton size="small">
+							<DeleteIcon color="secondary" />
+						</IconButton>
+					</Box>
+				)}
 			</Box>
 		</Wrapper>
 	)
