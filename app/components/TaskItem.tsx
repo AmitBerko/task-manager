@@ -4,20 +4,20 @@ import EditIcon from '@mui/icons-material/Edit'
 import Wrapper from '@/components/Wrapper'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import { Task } from '@/lib/types'
+import { memo } from 'react'
 
-type Props = Task & {
+type Props = {
+	task: Task
+	handleSelect: (id: string, isChecked: boolean) => void
+	handleDelete: (id: string) => void
 	isMultiSelect: boolean
-	handleCheck: (taskId: string, isChecked: boolean) => void
 }
 
-export default function TaskItem({
-	id,
-	title,
-	description,
-	priority,
-	createdAt,
+export default memo(function TaskItem({
+	task: { id, title, description, priority, createdAt },
 	isMultiSelect,
-	handleCheck,
+	handleSelect,
+  handleDelete
 }: Props) {
 	return (
 		<Wrapper styles={{ p: 2 }}>
@@ -25,7 +25,7 @@ export default function TaskItem({
 				{isMultiSelect && (
 					<Checkbox
 						disableRipple
-						onChange={(e) => handleCheck(id, e.target.checked)}
+						onChange={(e) => handleSelect(id, e.target.checked)}
 						sx={{
 							p: 0,
 							mr: 1.5,
@@ -49,7 +49,7 @@ export default function TaskItem({
 						<IconButton size="small">
 							<EditIcon color="secondary" />
 						</IconButton>
-						<IconButton size="small">
+						<IconButton onClick={() => handleDelete(id)} size="small">
 							<DeleteIcon color="secondary" />
 						</IconButton>
 					</Box>
@@ -57,7 +57,7 @@ export default function TaskItem({
 			</Box>
 		</Wrapper>
 	)
-}
+})
 
 function TaskFooter({ priority, createdAt }: { priority: string; createdAt: Date }) {
 	const getPriorityColor = (priority: string) => {

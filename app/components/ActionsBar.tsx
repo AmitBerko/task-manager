@@ -63,6 +63,7 @@ export default function ActionsBar() {
 								)
 							}}
 						>
+							<MenuItem value="All">All</MenuItem>
 							<MenuItem value="High">High</MenuItem>
 							<MenuItem value="Medium">Medium</MenuItem>
 							<MenuItem value="Low">Low</MenuItem>
