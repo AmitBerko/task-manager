@@ -11,3 +11,8 @@ export type Task = {
 }
 
 export type PriorityFilter = 'All' | 'High' | 'Medium' | 'Low'
+
+export type Filter = {
+  search: string
+  priority: PriorityFilter
+}
