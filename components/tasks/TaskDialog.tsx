@@ -40,7 +40,7 @@ export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 	useEffect(() => {
 		if (!open) return
 
-		if (taskToEdit) {
+		if (isEditing) {
 			// Edit
 			setTitle(taskToEdit.title)
 			setDescription(taskToEdit.description)
@@ -51,11 +51,11 @@ export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 			setDescription('')
 			setPriority('Medium')
 		}
-	}, [open, taskToEdit])
+	}, [open, isEditing])
 
 	const handleSubmit = () => {
 		if (isEditing) {
-			// Update existing task
+			// Edit existing task
 			updateTask(taskToEdit.id, {
 				title,
 				description,
@@ -91,7 +91,7 @@ export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 				paper: {
 					sx: {
 						borderRadius: 2,
-						backgroundImage: 'none',
+						backgroundImage: 'none', // Remove the weird background color
 					},
 				},
 			}}

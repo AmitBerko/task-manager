@@ -6,7 +6,7 @@ import { useTasks } from '@/contexts/TasksProvider'
 import MultiSelector from './MultiSelector'
 
 type Props = {
-  tasks: Task[]
+	tasks: Task[]
 	openEditDialog: (task: Task) => void
 }
 
@@ -15,13 +15,10 @@ function TaskList({ tasks, openEditDialog }: Props) {
 	const [isMultiSelect, setIsMultiSelect] = useState(false)
 	const { deleteTask } = useTasks()
 
-	const handleSelect = useCallback(
-		(id: string, isChecked: boolean) => {
-			console.log('selected id:', id)
-			setSelectedIds((prev) => (isChecked ? [...prev, id] : prev.filter((i) => i !== id)))
-		},
-		[setSelectedIds]
-	)
+  // Exact same function is passed to every task item so usecallback should be used
+	const handleSelect = useCallback((id: string, isChecked: boolean) => {
+		setSelectedIds((prev) => (isChecked ? [...prev, id] : prev.filter((i) => i !== id)))
+	}, [])
 
 	const toggleMultiSelect = () => {
 		setSelectedIds([])
@@ -58,5 +55,4 @@ function TaskList({ tasks, openEditDialog }: Props) {
 	)
 }
 
-// Memoize the component - it will only rerender if props actually change
 export default TaskList

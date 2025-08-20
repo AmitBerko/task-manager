@@ -12,7 +12,6 @@ export default function TasksManager() {
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const [taskToEdit, setTaskToEdit] = useState<Task | null>(null)
 	const [filter, setFilter] = useState<Filter>({ search: '', priority: 'All' })
-
 	const { tasks } = useTasks()
 
 	const filteredTasks = useMemo(() => {
