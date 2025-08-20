@@ -1,10 +1,11 @@
 import { Typography, IconButton, Checkbox, Box } from '@mui/material'
+import { Priority, Task } from '@/lib/types'
+import { memo } from 'react'
+import { PriorityCircle } from './PriorityCircle'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import Wrapper from '@/components/Wrapper'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
-import { Priority, Task } from '@/lib/types'
-import { memo } from 'react'
 
 type Props = {
 	task: Task
@@ -64,32 +65,6 @@ export default memo(function TaskItem({
 		</Wrapper>
 	)
 })
-
-export function PriorityCircle({ priority }: { priority: Priority }) {
-	const getPriorityColor = (priority: string) => {
-		switch (priority) {
-			case 'High':
-				return '#ef4444'
-			case 'Medium':
-				return '#eab308'
-			case 'Low':
-				return '#22c55e'
-			default:
-				return '#6b7280'
-		}
-	}
-
-	return (
-		<Box
-			sx={{
-				width: 8,
-				height: 8,
-				borderRadius: '50%',
-				bgcolor: getPriorityColor(priority),
-			}}
-		/>
-	)
-}
 
 function TaskFooter({ priority, createdAt }: { priority: Priority; createdAt: Date }) {
 	return (

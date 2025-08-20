@@ -18,8 +18,8 @@ import {
 import CloseIcon from '@mui/icons-material/Close'
 import AddIcon from '@mui/icons-material/Add'
 import { Priority, Task } from '@/lib/types'
-import { PriorityCircle } from './TaskItem'
 import { useTasks } from '@/contexts/TasksProvider'
+import { PriorityCircle } from './PriorityCircle'
 
 type Props = {
 	open: boolean
@@ -35,8 +35,8 @@ export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 	const { addTask, updateTask } = useTasks()
 
 	const isEditing = !!taskToEdit
+	const canSubmit = !!title.trim()
 
-	// Reset form when dialog opens/closes or when taskToEdit changes
 	useEffect(() => {
 		if (!open) return
 
@@ -54,8 +54,6 @@ export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 	}, [open, taskToEdit])
 
 	const handleSubmit = () => {
-		if (!title.trim()) return
-
 		if (isEditing) {
 			// Update existing task
 			updateTask(taskToEdit.id, {
@@ -179,7 +177,7 @@ export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 				<Button
 					onClick={handleSubmit}
 					variant="contained"
-					disabled={!title.trim()}
+					disabled={!canSubmit}
 					startIcon={<AddIcon />}
 				>
 					{isEditing ? 'Update' : 'Create'} Task
