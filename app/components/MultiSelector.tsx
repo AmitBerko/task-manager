@@ -4,7 +4,14 @@ import { Box, Button, IconButton, Typography } from '@mui/material'
 import React from 'react'
 
 export default function MultiSelector() {
-	const { selectedIds, isMultiSelect, setIsMultiSelect, bulkDeleteTasks } = useTasks()
+	const { selectedIds, setSelectedIds, isMultiSelect, setIsMultiSelect, bulkDeleteTasks } =
+		useTasks()
+
+	const toggleMultiSelect = () => {
+    setSelectedIds([])
+		setIsMultiSelect((prev) => !prev)
+	}
+
 	return (
 		<Box
 			sx={{
@@ -26,7 +33,7 @@ export default function MultiSelector() {
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
 				{!isMultiSelect ? (
 					<IconButton
-						onClick={() => setIsMultiSelect((prev) => !prev)}
+						onClick={toggleMultiSelect}
 						sx={{
 							color: 'text.secondary',
 						}}
@@ -50,7 +57,7 @@ export default function MultiSelector() {
 							Delete {selectedIds.length}
 						</Button>
 						<IconButton
-							onClick={() => setIsMultiSelect((prev) => !prev)}
+							onClick={toggleMultiSelect}
 							sx={{
 								color: 'text.secondary',
 							}}
