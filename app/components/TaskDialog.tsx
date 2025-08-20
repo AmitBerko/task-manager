@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
 	Dialog,
 	DialogTitle,
@@ -19,67 +19,64 @@ import CloseIcon from '@mui/icons-material/Close'
 import AddIcon from '@mui/icons-material/Add'
 import { Priority, Task } from '@/lib/types'
 import { PriorityCircle } from './TaskItem'
+import { useTasks } from '@/contexts/TasksProvider'
 
 type Props = {
 	open: boolean
 	onClose: () => void
-	onAdd: (task: Omit<Task, 'createdAt' | 'id'>) => void
-	onEdit: (task: Task) => void
-	taskToEdit?: Task
+	taskToEdit: Task | null
 }
 
-export default function TaskDialog({ open, onClose, onAdd, onEdit, taskToEdit }: Props) {
+export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 	const [title, setTitle] = useState('')
 	const [description, setDescription] = useState('')
 	const [priority, setPriority] = useState<Priority>('Medium')
 
+	const { addTask, updateTask } = useTasks()
+
+	const isEditing = !!taskToEdit
+
+	// Reset form when dialog opens/closes or when taskToEdit changes
 	useEffect(() => {
+		if (!open) return
+
 		if (taskToEdit) {
+			// Edit
 			setTitle(taskToEdit.title)
 			setDescription(taskToEdit.description)
 			setPriority(taskToEdit.priority)
 		} else {
+			// Add
 			setTitle('')
 			setDescription('')
 			setPriority('Medium')
 		}
-	}, [taskToEdit])
+	}, [open, taskToEdit])
 
-	const handleAdd = () => {
-		if (title.trim()) {
-			onAdd({
-				title: title.trim(),
-				description: description.trim(),
+	const handleSubmit = () => {
+		if (!title.trim()) return
+
+		if (isEditing) {
+			// Update existing task
+			updateTask(taskToEdit.id, {
+				title,
+				description,
 				priority,
 			})
-			// Reset form
-			setTitle('')
-			setDescription('')
-			setPriority('Medium')
-			onClose()
-		}
-	}
-
-	const handleEdit = () => {
-		if (title.trim() && taskToEdit && taskToEdit.id && taskToEdit.createdAt) {
-			onEdit({
-				id: taskToEdit.id,
-				createdAt: taskToEdit.createdAt,
-				title: title.trim(),
-				description: description.trim(),
+		} else {
+			// Add new task
+			addTask({
+				title,
+				description,
 				priority,
 			})
-
-			// Reset form
-			setTitle('')
-			setDescription('')
-			setPriority('Medium')
-			onClose()
 		}
+
+		handleClose()
 	}
 
 	const handleClose = () => {
-		// Reset form on close
+		// Reset form
 		setTitle('')
 		setDescription('')
 		setPriority('Medium')
@@ -111,7 +108,7 @@ export default function TaskDialog({ open, onClose, onAdd, onEdit, taskToEdit }:
 				}}
 			>
 				<Typography variant="h6" fontWeight="bold">
-					{taskToEdit ? 'Edit Task' : 'Create New Task'}
+					{isEditing ? 'Edit Task' : 'Create New Task'}
 				</Typography>
 				<IconButton onClick={handleClose} size="small">
 					<CloseIcon />
@@ -180,12 +177,12 @@ export default function TaskDialog({ open, onClose, onAdd, onEdit, taskToEdit }:
 					Cancel
 				</Button>
 				<Button
-					onClick={taskToEdit ? handleEdit : handleAdd}
+					onClick={handleSubmit}
 					variant="contained"
 					disabled={!title.trim()}
 					startIcon={<AddIcon />}
 				>
-					{taskToEdit ? 'Edit' : 'Create'} Task
+					{isEditing ? 'Update' : 'Create'} Task
 				</Button>
 			</DialogActions>
 		</Dialog>

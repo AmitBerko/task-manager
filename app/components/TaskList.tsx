@@ -1,17 +1,24 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import TaskItem from './TaskItem'
 import { Box, Stack } from '@mui/material'
 import { Task } from '@/lib/types'
+import { useTasks } from '@/contexts/TasksProvider'
 
 type Props = {
-	tasks: Task[]
-	handleSelect: (id: string, isChecked: boolean) => void
-	handleDelete: (id: string) => void
 	openEditDialog: (task: Task) => void
-	isMultiSelect: boolean
 }
 
-export default function TaskList({ tasks, isMultiSelect, handleSelect, handleDelete, openEditDialog }: Props) {
+function TaskList({ openEditDialog }: Props) {
+	const { tasks, setSelectedIds, isMultiSelect, deleteTask } = useTasks()
+
+	const handleSelect = useCallback(
+		(id: string, isChecked: boolean) => {
+			console.log('selected id:', id)
+			setSelectedIds((prev) => (isChecked ? [...prev, id] : prev.filter((i) => i !== id)))
+		},
+		[setSelectedIds]
+	)
+
 	return (
 		<Box width="100%">
 			<Stack rowGap={2.5}>
@@ -20,7 +27,7 @@ export default function TaskList({ tasks, isMultiSelect, handleSelect, handleDel
 						key={task.id}
 						task={task}
 						handleSelect={handleSelect}
-						handleDelete={handleDelete}
+						handleDelete={deleteTask}
 						openEditDialog={openEditDialog}
 						isMultiSelect={isMultiSelect}
 					/>
@@ -29,3 +36,6 @@ export default function TaskList({ tasks, isMultiSelect, handleSelect, handleDel
 		</Box>
 	)
 }
+
+// Memoize the component - it will only rerender if props actually change
+export default TaskList

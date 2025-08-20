@@ -1,20 +1,10 @@
+import { useTasks } from '@/contexts/TasksProvider'
 import { DeleteOutline, Deselect, SelectAll } from '@mui/icons-material'
 import { Box, Button, IconButton, Typography } from '@mui/material'
 import React from 'react'
 
-type Props = {
-	isMultiSelect: boolean
-	selectedCount: number
-	toggleMultiSelect: () => void
-	handleBulkDelete: () => void
-}
-
-export default function MultiSelector({
-	isMultiSelect,
-	selectedCount,
-	toggleMultiSelect,
-	handleBulkDelete,
-}: Props) {
+export default function MultiSelector() {
+	const { selectedIds, isMultiSelect, setIsMultiSelect, bulkDeleteTasks } = useTasks()
 	return (
 		<Box
 			sx={{
@@ -36,7 +26,7 @@ export default function MultiSelector({
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
 				{!isMultiSelect ? (
 					<IconButton
-						onClick={toggleMultiSelect}
+						onClick={() => setIsMultiSelect((prev) => !prev)}
 						sx={{
 							color: 'text.secondary',
 						}}
@@ -50,17 +40,17 @@ export default function MultiSelector({
 							variant="contained"
 							color="error"
 							startIcon={<DeleteOutline />}
-							onClick={handleBulkDelete}
-							disabled={selectedCount === 0}
+							onClick={bulkDeleteTasks}
+							disabled={selectedIds.length === 0}
 							sx={{
 								textTransform: 'none',
 								borderRadius: 2,
 							}}
 						>
-							Delete {selectedCount}
+							Delete {selectedIds.length}
 						</Button>
 						<IconButton
-							onClick={toggleMultiSelect}
+							onClick={() => setIsMultiSelect((prev) => !prev)}
 							sx={{
 								color: 'text.secondary',
 							}}

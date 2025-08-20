@@ -3,6 +3,7 @@ import { CssBaseline } from '@mui/material'
 import type { Metadata } from 'next'
 import './globals.css'
 import ThemeModeProvider from '@/contexts/ThemeModeProvider'
+import TasksProvider from '@/contexts/TasksProvider'
 
 export const metadata: Metadata = {
 	title: 'Task Manager',
@@ -19,8 +20,10 @@ export default function RootLayout({
 			<body>
 				<AppRouterCacheProvider>
 					<ThemeModeProvider>
-						<CssBaseline />
-						{children}
+						<TasksProvider>
+							<CssBaseline />
+							{children}
+						</TasksProvider>
 					</ThemeModeProvider>
 				</AppRouterCacheProvider>
 			</body>

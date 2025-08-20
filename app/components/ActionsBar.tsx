@@ -1,30 +1,18 @@
 'use client'
 
-import {
-	Box,
-	Button,
-	FormControl,
-	Grid,
-	MenuItem,
-	Select,
-	SelectChangeEvent,
-	TextField,
-} from '@mui/material'
+import { Box, Button, FormControl, Grid, MenuItem, Select, TextField } from '@mui/material'
 import React from 'react'
 import { Search as SearchIcon, FilterAltOutlined as FilterIcon } from '@mui/icons-material'
 import Wrapper from '@/components/Wrapper'
 import { PriorityFilter } from '@/lib/types'
+import { useTasks } from '@/contexts/TasksProvider'
 
 type Props = {
-	filter: PriorityFilter
-	onFilterChange: (value: PriorityFilter) => void
-	openAddTaskDialog: () => void
+	openAddDialog: () => void
 }
 
-export default function ActionsBar({ filter, onFilterChange, openAddTaskDialog }: Props) {
-	const handleFilterChange = (e: SelectChangeEvent) => {
-		onFilterChange(e.target.value as PriorityFilter)
-	}
+export default function ActionsBar({ openAddDialog }: Props) {
+	const { priorityFilter, setPriorityFilter } = useTasks()
 
 	return (
 		<Wrapper>
@@ -40,12 +28,12 @@ export default function ActionsBar({ filter, onFilterChange, openAddTaskDialog }
 					/>
 				</Grid>
 
-				{/* Filter Select */}
+				{/* Filter By Priority */}
 				<Grid size={2.5}>
 					<FormControl fullWidth size="small">
 						<Select
-							value={filter}
-							onChange={handleFilterChange}
+							value={priorityFilter}
+							onChange={(e) => setPriorityFilter(e.target.value as PriorityFilter)}
 							displayEmpty
 							sx={{
 								height: '100%',
@@ -72,7 +60,7 @@ export default function ActionsBar({ filter, onFilterChange, openAddTaskDialog }
 
 				{/* Add Task Button */}
 				<Grid size={3}>
-					<Button onClick={openAddTaskDialog} variant="contained" size="small" fullWidth>
+					<Button onClick={openAddDialog} variant="contained" size="small" fullWidth>
 						Add Task
 					</Button>
 				</Grid>
