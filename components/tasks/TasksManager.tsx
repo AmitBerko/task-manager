@@ -1,36 +1,63 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useMemo } from 'react'
 import { Stack } from '@mui/material'
 import ActionsBar from './ActionsBar'
-import MultiSelector from './TaskList/MultiSelector'
 import TaskList from './TaskList/TaskList'
-import { Task } from '@/lib/types'
+import { Filter, Task } from '@/lib/types'
 import TaskDialog from './TaskDialog'
+import { useTasks } from '@/contexts/TasksProvider'
 
 export default function TasksManager() {
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const [taskToEdit, setTaskToEdit] = useState<Task | null>(null)
+	const [filter, setFilter] = useState<Filter>({ search: '', priority: 'All' })
 
-	const openAddDialog = () => {
+	const { tasks } = useTasks()
+
+	const filteredTasks = useMemo(() => {
+		let filtered = tasks
+
+		// Filter by priority
+		if (filter.priority !== 'All') {
+			filtered = filtered.filter((task) => task.priority === filter.priority)
+		}
+
+		// Filter by title and description
+		if (filter.search.trim()) {
+			const searchTerm = filter.search.toLowerCase().trim()
+			filtered = filtered.filter(
+				(task) =>
+					task.title.toLowerCase().includes(searchTerm) ||
+					task.description?.toLowerCase().includes(searchTerm)
+			)
+		}
+
+		return filtered
+	}, [tasks, filter])
+
+	const openAddDialog = useCallback(() => {
 		setTaskToEdit(null)
 		setIsDialogOpen(true)
-	}
+	}, [])
 
 	const openEditDialog = useCallback((task: Task) => {
 		setTaskToEdit(task)
 		setIsDialogOpen(true)
 	}, [])
 
-	const closeDialog = () => {
+	const closeDialog = useCallback(() => {
 		setIsDialogOpen(false)
 		setTaskToEdit(null)
-	}
+	}, [])
 
 	return (
 		<Stack spacing={2} width="100%">
-			<ActionsBar openAddDialog={openAddDialog} />
-			<TaskList openEditDialog={openEditDialog} />
+			<ActionsBar openAddDialog={openAddDialog} filter={filter} setFilter={setFilter} />
+			<TaskList
+				tasks={filteredTasks}
+				openEditDialog={openEditDialog}
+			/>
 			<TaskDialog open={isDialogOpen} onClose={closeDialog} taskToEdit={taskToEdit} />
 		</Stack>
 	)

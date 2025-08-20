@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import TaskItem from './TaskItem'
 import { Box, Stack } from '@mui/material'
 import { Task } from '@/lib/types'
@@ -6,11 +6,14 @@ import { useTasks } from '@/contexts/TasksProvider'
 import MultiSelector from './MultiSelector'
 
 type Props = {
+  tasks: Task[]
 	openEditDialog: (task: Task) => void
 }
 
-function TaskList({ openEditDialog }: Props) {
-	const { tasks, setSelectedIds, isMultiSelect, deleteTask } = useTasks()
+function TaskList({ tasks, openEditDialog }: Props) {
+	const [selectedIds, setSelectedIds] = useState<string[]>([])
+	const [isMultiSelect, setIsMultiSelect] = useState(false)
+	const { deleteTask } = useTasks()
 
 	const handleSelect = useCallback(
 		(id: string, isChecked: boolean) => {
@@ -20,9 +23,25 @@ function TaskList({ openEditDialog }: Props) {
 		[setSelectedIds]
 	)
 
+	const toggleMultiSelect = () => {
+		setSelectedIds([])
+		setIsMultiSelect((prev) => !prev)
+	}
+
+	const bulkDelete = () => {
+		selectedIds.forEach((id) => deleteTask(id))
+		setSelectedIds([])
+		setIsMultiSelect(false)
+	}
+
 	return (
 		<Box width="100%">
-      <MultiSelector />
+			<MultiSelector
+				isMultiSelect={isMultiSelect}
+				selectedIds={selectedIds}
+				toggleMultiSelect={toggleMultiSelect}
+				bulkDelete={bulkDelete}
+			/>
 			<Stack rowGap={2.5}>
 				{tasks.map((task) => (
 					<TaskItem

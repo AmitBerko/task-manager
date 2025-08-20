@@ -4,15 +4,22 @@ import { Box, Button, FormControl, Grid, MenuItem, Select, TextField } from '@mu
 import React from 'react'
 import { Search as SearchIcon, FilterAltOutlined as FilterIcon } from '@mui/icons-material'
 import Wrapper from '@/components/common/Wrapper'
-import { PriorityFilter } from '@/lib/types'
-import { useTasks } from '@/contexts/TasksProvider'
+import { Filter, PriorityFilter } from '@/lib/types'
 
 type Props = {
 	openAddDialog: () => void
+	filter: Filter
+	setFilter: (filter: Filter) => void
 }
 
-export default function ActionsBar({ openAddDialog }: Props) {
-	const { priorityFilter, setPriorityFilter } = useTasks()
+export default function ActionsBar({ openAddDialog, filter, setFilter }: Props) {
+	const handleSearchChange = (search: string) => {
+		setFilter({ ...filter, search })
+	}
+
+	const handlePriorityChange = (priority: PriorityFilter) => {
+		setFilter({ ...filter, priority })
+	}
 
 	return (
 		<Wrapper>
@@ -22,6 +29,8 @@ export default function ActionsBar({ openAddDialog }: Props) {
 					<TextField
 						fullWidth
 						placeholder="Search tasks..."
+						value={filter.search}
+						onChange={(e) => handleSearchChange(e.target.value)}
 						size="small"
 						variant="outlined"
 						slotProps={{ input: { startAdornment: <SearchIcon sx={{ ml: 1, mr: 1 }} /> } }}
@@ -32,8 +41,8 @@ export default function ActionsBar({ openAddDialog }: Props) {
 				<Grid size={2.5}>
 					<FormControl fullWidth size="small">
 						<Select
-							value={priorityFilter}
-							onChange={(e) => setPriorityFilter(e.target.value as PriorityFilter)}
+							value={filter.priority}
+							onChange={(e) => handlePriorityChange(e.target.value as PriorityFilter)}
 							displayEmpty
 							sx={{
 								height: '100%',

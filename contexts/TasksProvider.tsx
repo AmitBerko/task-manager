@@ -11,16 +11,16 @@ type TasksContextType = {
 	setPriorityFilter: React.Dispatch<React.SetStateAction<PriorityFilter>>
 
 	// Selection state
-	selectedIds: string[]
-	setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
-	isMultiSelect: boolean
-	setIsMultiSelect: React.Dispatch<React.SetStateAction<boolean>>
+	// selectedIds: string[]
+	// setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
+	// isMultiSelect: boolean
+	// setIsMultiSelect: React.Dispatch<React.SetStateAction<boolean>>
 
 	// Actions - clean, focused functions
 	addTask: (task: Omit<Task, 'createdAt' | 'id'>) => void
 	updateTask: (id: string, updates: Partial<Omit<Task, 'id' | 'createdAt'>>) => void
 	deleteTask: (id: string) => void
-	bulkDeleteTasks: () => void
+	// bulkDeleteTasks: () => void
 }
 
 const TasksContext = createContext<TasksContextType | null>(null)
@@ -28,16 +28,16 @@ const TasksContext = createContext<TasksContextType | null>(null)
 function TasksProvider({ children }: { children: ReactNode }) {
 	const [tasks, setTasks] = useState<Task[]>(getSampleTasks())
 	const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('All')
-	const [selectedIds, setSelectedIds] = useState<string[]>([])
-	const [isMultiSelect, setIsMultiSelect] = useState(false)
+	// const [selectedIds, setSelectedIds] = useState<string[]>([])
+	// const [isMultiSelect, setIsMultiSelect] = useState(false)
 
-	const visibleTasks = useMemo(() => {
-		if (priorityFilter === 'All') {
-			return tasks
-		}
+	// const visibleTasks = useMemo(() => {
+	// 	if (priorityFilter === 'All') {
+	// 		return tasks
+	// 	}
 
-		return tasks.filter((task) => task.priority === priorityFilter)
-	}, [tasks, priorityFilter])
+	// 	return tasks.filter((task) => task.priority === priorityFilter)
+	// }, [tasks, priorityFilter])
 
 	const addTask = useCallback((taskData: Omit<Task, 'createdAt' | 'id'>) => {
 		const newTask: Task = {
@@ -56,25 +56,25 @@ function TasksProvider({ children }: { children: ReactNode }) {
 		setTasks((prev) => prev.filter((task) => task.id !== id))
 	}, [])
 
-	const bulkDeleteTasks = useCallback(() => {
-		setTasks((prev) => prev.filter((task) => !selectedIds.includes(task.id)))
-		setSelectedIds([])
-	}, [selectedIds])
+	// const bulkDeleteTasks = useCallback(() => {
+	// 	setTasks((prev) => prev.filter((task) => !selectedIds.includes(task.id)))
+	// 	setSelectedIds([])
+	// }, [selectedIds])
 
 	return (
 		<TasksContext.Provider
 			value={{
-				tasks: visibleTasks,
+				tasks,
 				priorityFilter,
 				setPriorityFilter,
-				selectedIds,
-				setSelectedIds,
-				isMultiSelect,
-				setIsMultiSelect,
+				// selectedIds,
+				// setSelectedIds,
+				// isMultiSelect,
+				// setIsMultiSelect,
 				addTask,
 				updateTask,
 				deleteTask,
-				bulkDeleteTasks,
+				// bulkDeleteTasks,
 			}}
 		>
 			{children}
