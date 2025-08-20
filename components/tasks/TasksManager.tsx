@@ -3,8 +3,8 @@
 import { useCallback, useState } from 'react'
 import { Stack } from '@mui/material'
 import ActionsBar from './ActionsBar'
-import MultiSelector from './MultiSelector'
-import TaskList from './TaskList'
+import MultiSelector from './TaskList/MultiSelector'
+import TaskList from './TaskList/TaskList'
 import { Task } from '@/lib/types'
 import TaskDialog from './TaskDialog'
 
@@ -30,7 +30,6 @@ export default function TasksManager() {
 	return (
 		<Stack spacing={2} width="100%">
 			<ActionsBar openAddDialog={openAddDialog} />
-			<MultiSelector />
 			<TaskList openEditDialog={openEditDialog} />
 			<TaskDialog open={isDialogOpen} onClose={closeDialog} taskToEdit={taskToEdit} />
 		</Stack>

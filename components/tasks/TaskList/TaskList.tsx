@@ -3,6 +3,7 @@ import TaskItem from './TaskItem'
 import { Box, Stack } from '@mui/material'
 import { Task } from '@/lib/types'
 import { useTasks } from '@/contexts/TasksProvider'
+import MultiSelector from './MultiSelector'
 
 type Props = {
 	openEditDialog: (task: Task) => void
@@ -21,6 +22,7 @@ function TaskList({ openEditDialog }: Props) {
 
 	return (
 		<Box width="100%">
+      <MultiSelector />
 			<Stack rowGap={2.5}>
 				{tasks.map((task) => (
 					<TaskItem

@@ -1,7 +1,7 @@
 import { Container, Stack } from '@mui/material'
 import React from 'react'
-import Header from './components/Header'
-import TasksManager from './components/TasksManager'
+import Header from '../components/layout/Header'
+import TasksManager from '../components/tasks/TasksManager'
 
 export default function TasksPage() {
 	return (

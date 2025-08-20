@@ -1,10 +1,10 @@
 import { Typography, IconButton, Checkbox, Box } from '@mui/material'
 import { Priority, Task } from '@/lib/types'
 import { memo } from 'react'
-import { PriorityCircle } from './PriorityCircle'
+import { PriorityCircle } from '../../common/PriorityCircle'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-import Wrapper from '@/components/Wrapper'
+import Wrapper from '@/components/common/Wrapper'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 
 type Props = {

@@ -19,7 +19,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import AddIcon from '@mui/icons-material/Add'
 import { Priority, Task } from '@/lib/types'
 import { useTasks } from '@/contexts/TasksProvider'
-import { PriorityCircle } from './PriorityCircle'
+import { PriorityCircle } from '../common/PriorityCircle'
 
 type Props = {
 	open: boolean
