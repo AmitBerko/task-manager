@@ -73,12 +73,15 @@ export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 		handleClose()
 	}
 
-	const handleClose = () => {
+	const handleClose = async () => {
 		// Reset form
+		onClose()
+
+    // Added a small delay because of the dialog's closing transition
+		await new Promise((resolve) => setTimeout(resolve, 125))
 		setTitle('')
 		setDescription('')
 		setPriority('Medium')
-		onClose()
 	}
 
 	return (

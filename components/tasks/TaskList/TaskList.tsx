@@ -33,14 +33,31 @@ function TaskList({ tasks, openEditDialog }: Props) {
 	}
 
 	return (
-		<Box width="100%">
+		<Box sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
 			<MultiSelector
 				isMultiSelect={isMultiSelect}
 				selectedIds={selectedIds}
 				toggleMultiSelect={toggleMultiSelect}
 				bulkDelete={bulkDelete}
 			/>
-			<Stack rowGap={2.5}>
+			<Stack
+				rowGap={2.5}
+				sx={(theme) => ({
+					flex: 1,
+					minHeight: 0,
+					overflowY: 'auto',
+					pr: '7px',
+					'&::-webkit-scrollbar': { width: '7px' },
+					'&::-webkit-scrollbar-track': {
+						background: theme.palette.background.paper,
+						borderRadius: '10px',
+					},
+					'&::-webkit-scrollbar-thumb': {
+						background: theme.palette.text.secondary,
+						borderRadius: '10px',
+					},
+				})}
+			>
 				{tasks.length > 0 ? (
 					tasks.map((task) => (
 						<TaskItem

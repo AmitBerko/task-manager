@@ -16,7 +16,7 @@ export default function Wrapper({ children, styles }: Props) {
 				width: '100%',
 				bgcolor: 'background.paper',
 				borderRadius: '1rem',
-				outline: `solid 1px ${theme.palette.divider}`,
+				border: `solid 1px ${theme.palette.divider}`,
 				...styles,
 			}}
 		>

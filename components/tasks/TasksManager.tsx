@@ -51,12 +51,9 @@ export default function TasksManager() {
 	}, [])
 
 	return (
-		<Stack spacing={2} width="100%">
+		<Stack spacing={2} sx={{ width: '100%', flex: 1, minHeight: 0 }}>
 			<ActionsBar openAddDialog={openAddDialog} filter={filter} setFilter={setFilter} />
-			<TaskList
-				tasks={filteredTasks}
-				openEditDialog={openEditDialog}
-			/>
+			<TaskList tasks={filteredTasks} openEditDialog={openEditDialog} />
 			<TaskDialog open={isDialogOpen} onClose={closeDialog} taskToEdit={taskToEdit} />
 		</Stack>
 	)

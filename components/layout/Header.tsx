@@ -11,7 +11,7 @@ export default function Header() {
 				justifyContent: 'space-between',
 				alignItems: 'center',
 				width: '100%',
-				py: { xs: 1, sm: 2 },
+				pb: { xs: 1, sm: 2 },
 			}}
 		>
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
