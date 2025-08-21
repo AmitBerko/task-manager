@@ -22,10 +22,10 @@ export default function ActionsBar({ openAddDialog, filter, setFilter }: Props) 
 	}
 
 	return (
-		<Wrapper>
-			<Grid container spacing={2} sx={{ width: '100%', alignItems: 'center' }}>
+		<Wrapper styles={{ p: { xs: 2, sm: 3 } }}>
+			<Grid container spacing={2} sx={{ width: '100%', alignItems: 'stretch' }}>
 				{/* Search Input */}
-				<Grid size={6.5}>
+				<Grid size={{ xs: 12, sm: 5.5 }}>
 					<TextField
 						fullWidth
 						placeholder="Search tasks..."
@@ -38,7 +38,7 @@ export default function ActionsBar({ openAddDialog, filter, setFilter }: Props) 
 				</Grid>
 
 				{/* Filter By Priority */}
-				<Grid size={2.5}>
+				<Grid minWidth={135}>
 					<FormControl fullWidth size="small">
 						<Select
 							value={filter.priority}
@@ -68,7 +68,7 @@ export default function ActionsBar({ openAddDialog, filter, setFilter }: Props) 
 				</Grid>
 
 				{/* Add Task Button */}
-				<Grid size={3}>
+				<Grid size="grow" display="flex">
 					<Button onClick={openAddDialog} variant="contained" size="small" fullWidth>
 						Add Task
 					</Button>

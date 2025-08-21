@@ -11,7 +11,7 @@ export default function Header() {
 				justifyContent: 'space-between',
 				alignItems: 'center',
 				width: '100%',
-				pb: { xs: 1, sm: 2 },
+				pb: { xs: 2 },
 			}}
 		>
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -41,6 +41,7 @@ export default function Header() {
 					sx={{
 						fontSize: { xs: '1.8rem', sm: '2.8rem', md: '3.2rem' },
 						fontWeight: 'bold',
+            textAlign: 'center'
 					}}
 				>
 					Task Manager
