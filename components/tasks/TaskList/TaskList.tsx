@@ -4,6 +4,7 @@ import { Box, Stack } from '@mui/material'
 import { Task } from '@/lib/types'
 import { useTasks } from '@/contexts/TasksProvider'
 import MultiSelector from './MultiSelector'
+import NoTasksFound from './NoTasksFound'
 
 type Props = {
 	tasks: Task[]
@@ -15,7 +16,7 @@ function TaskList({ tasks, openEditDialog }: Props) {
 	const [isMultiSelect, setIsMultiSelect] = useState(false)
 	const { deleteTask } = useTasks()
 
-  // Exact same function is passed to every task item so usecallback should be used
+	// Exact same function is passed to every task item so usecallback should be used
 	const handleSelect = useCallback((id: string, isChecked: boolean) => {
 		setSelectedIds((prev) => (isChecked ? [...prev, id] : prev.filter((i) => i !== id)))
 	}, [])
@@ -40,16 +41,20 @@ function TaskList({ tasks, openEditDialog }: Props) {
 				bulkDelete={bulkDelete}
 			/>
 			<Stack rowGap={2.5}>
-				{tasks.map((task) => (
-					<TaskItem
-						key={task.id}
-						task={task}
-						handleSelect={handleSelect}
-						handleDelete={deleteTask}
-						openEditDialog={openEditDialog}
-						isMultiSelect={isMultiSelect}
-					/>
-				))}
+				{tasks.length > 0 ? (
+					tasks.map((task) => (
+						<TaskItem
+							key={task.id}
+							task={task}
+							handleSelect={handleSelect}
+							handleDelete={deleteTask}
+							openEditDialog={openEditDialog}
+							isMultiSelect={isMultiSelect}
+						/>
+					))
+				) : (
+					<NoTasksFound />
+				)}
 			</Stack>
 		</Box>
 	)
