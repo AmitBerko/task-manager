@@ -41,7 +41,6 @@ export default function MultiSelector({
 							color: 'text.secondary',
 						}}
 					>
-						{/* Maybe add a tooltip later */}
 						<SelectAll />
 					</IconButton>
 				) : (

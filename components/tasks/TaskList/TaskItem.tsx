@@ -22,7 +22,6 @@ export default memo(function TaskItem({
 	handleDelete,
 	openEditDialog,
 }: Props) {
-  console.log('render')
 	return (
 		<Wrapper styles={{ p: 2 }}>
 			<Box display="flex" width="100%" alignItems="flex-start">
