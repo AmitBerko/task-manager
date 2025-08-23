@@ -1,7 +1,7 @@
 'use client'
 
 import { getSampleTasks } from '@/lib/data'
-import { PriorityFilter, Task } from '@/lib/types'
+import { Task } from '@/lib/types'
 import { createContext, useContext, useCallback, useState, type ReactNode } from 'react'
 
 type TasksContextType = {

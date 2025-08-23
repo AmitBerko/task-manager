@@ -1,7 +1,7 @@
 'use client'
 import createAppTheme from '@/lib/theme'
 import { ThemeMode } from '@/lib/types'
-import { ThemeProvider } from '@mui/material'
+import { CssBaseline, ThemeProvider } from '@mui/material'
 import { createContext, useContext, useState, type ReactNode } from 'react'
 
 type ThemeContextType = {
@@ -17,11 +17,14 @@ function ThemeModeProvider({ children }: { children: ReactNode }) {
 		setMode((prevMode) => (prevMode === 'dark' ? 'light' : 'dark'))
 	}
 
-  const theme = createAppTheme(mode)
+	const theme = createAppTheme(mode)
 
 	return (
 		<ThemeModeContext.Provider value={{ mode, toggleThemeMode }}>
-			<ThemeProvider theme={theme}>{children}</ThemeProvider>
+			<ThemeProvider theme={theme}>
+				<CssBaseline />
+				{children}
+			</ThemeProvider>
 		</ThemeModeContext.Provider>
 	)
 }

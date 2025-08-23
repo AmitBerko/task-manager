@@ -1,5 +1,4 @@
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
-import { CssBaseline } from '@mui/material'
 import type { Metadata } from 'next'
 import './globals.css'
 import ThemeModeProvider from '@/contexts/ThemeModeProvider'
@@ -20,10 +19,7 @@ export default function RootLayout({
 			<body>
 				<AppRouterCacheProvider>
 					<ThemeModeProvider>
-						<TasksProvider>
-							<CssBaseline />
-							{children}
-						</TasksProvider>
+						<TasksProvider>{children}</TasksProvider>
 					</ThemeModeProvider>
 				</AppRouterCacheProvider>
 			</body>
