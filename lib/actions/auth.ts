@@ -2,8 +2,9 @@
 
 import { prisma } from '../prisma'
 import { User } from '@prisma/client'
-import { ActionResponse } from '../types'
+import { ActionResponse } from '../../types/types'
 import bcrypt from 'bcrypt'
+import { signIn } from 'next-auth/react'
 
 const saltRounds = 10
 
@@ -28,6 +29,8 @@ export const register = async (formData: FormData): ActionResponse<User> => {
 	const hashedPassword = await bcrypt.hash(password, saltRounds)
 	const user = await prisma.user.create({ data: { email, password: hashedPassword } })
 	console.log(user)
+  const response = await signIn('credentials')
+  console.log('weird response is ', response)
 	return { success: true, data: user }
 }
 

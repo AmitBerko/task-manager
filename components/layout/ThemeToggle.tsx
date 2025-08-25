@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React from 'react'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
@@ -19,10 +19,14 @@ export default function ThemeToggle() {
 				borderRadius: '12px',
 				bgcolor: 'background.paper',
 				border: `1px solid ${theme.palette.divider}`,
+				'&:hover .icon': {
+					transform: 'scale(1.1)',
+				},
 			}}
 		>
 			{mode === 'light' ? (
 				<DarkModeIcon
+					className="icon"
 					sx={{
 						fontSize: { xs: '1.3rem', sm: '1.5rem' },
 						color: 'black',
@@ -30,6 +34,7 @@ export default function ThemeToggle() {
 				/>
 			) : (
 				<LightModeIcon
+					className="icon"
 					sx={{
 						fontSize: { xs: '1.3rem', sm: '1.5rem' },
 						color: '#ffd711',

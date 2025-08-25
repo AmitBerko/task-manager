@@ -4,7 +4,7 @@ import { useCallback, useState, useMemo } from 'react'
 import { Stack } from '@mui/material'
 import ActionsBar from './ActionsBar'
 import TaskList from './TaskList/TaskList'
-import { Filter, Task } from '@/lib/types'
+import { Filter, Task } from '@/types/types'
 import TaskDialog from './TaskDialog'
 import { useTasks } from '@/contexts/TasksProvider'
 

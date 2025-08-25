@@ -4,7 +4,7 @@ import { Box, Button, FormControl, Grid, MenuItem, Select, TextField } from '@mu
 import React from 'react'
 import { Search as SearchIcon, FilterAltOutlined as FilterIcon } from '@mui/icons-material'
 import Wrapper from '@/components/common/Wrapper'
-import { Filter, PriorityFilter } from '@/lib/types'
+import { Filter, PriorityFilter } from '@/types/types'
 
 type Props = {
 	openAddDialog: () => void

@@ -1,5 +1,5 @@
 import { Typography, IconButton, Checkbox, Box } from '@mui/material'
-import { Priority, Task } from '@/lib/types'
+import { Priority, Task } from '@/types/types'
 import { memo } from 'react'
 import { PriorityCircle } from '../../common/PriorityCircle'
 import DeleteIcon from '@mui/icons-material/Delete'

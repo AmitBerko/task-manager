@@ -1,4 +1,4 @@
-import { Task } from './types'
+import { Task } from '../types/types'
 
 // This is some placeholder data
 const tasks: Task[] = [

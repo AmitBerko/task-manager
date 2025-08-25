@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import TaskItem from './TaskItem'
 import { Box, Stack } from '@mui/material'
-import { Task } from '@/lib/types'
+import { Task } from '@/types/types'
 import { useTasks } from '@/contexts/TasksProvider'
 import MultiSelector from './MultiSelector'
 import NoTasksFound from './NoTasksFound'

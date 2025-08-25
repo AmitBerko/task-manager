@@ -2,7 +2,7 @@
 
 import { createTheme, PaletteOptions } from '@mui/material'
 import { roboto } from './fonts'
-import { ThemeMode } from './types'
+import { ThemeMode } from '../types/types'
 
 const darkPalette: PaletteOptions = {
 	mode: 'dark',

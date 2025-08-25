@@ -1,6 +1,6 @@
 'use client'
 import createAppTheme from '@/lib/theme'
-import { ThemeMode } from '@/lib/types'
+import { ThemeMode } from '@/types/types'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { createContext, useContext, useState, type ReactNode } from 'react'
 

@@ -1,4 +1,4 @@
-import { Priority } from "@/lib/types"
+import { Priority } from "@/types/types"
 import { Box } from "@mui/material"
 
 export function PriorityCircle({ priority }: { priority: Priority }) {
