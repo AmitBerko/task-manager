@@ -72,7 +72,7 @@ export const updateTask = async ({
 	return task
 }
 
-export const deleteTask = async ({ taskId }: { taskId: string }) => {
+export const deleteTask = async (taskId: string) => {
 	const session = await getServerSession(authOptions)
 	const userId = session?.user.id
 
@@ -80,14 +80,29 @@ export const deleteTask = async ({ taskId }: { taskId: string }) => {
 		throw new Error('Authentication required')
 	}
 
-	const user = await prisma.user.findUnique({ where: { id: userId }, select: { tasks: true } })
+	await prisma.task.deleteMany({
+		where: {
+			id: taskId,
+			userId: userId,
+		},
+	})
 
-	if (!user?.tasks.find((task) => task.id === taskId)) {
-		throw new Error('Task not found or access denied')
+	revalidatePath('/tasks')
+}
+
+export const bulkDeleteTasks = async (taskIds: string[]) => {
+	const session = await getServerSession(authOptions)
+	const userId = session?.user.id
+
+	if (!userId) {
+		throw new Error('Authentication required')
 	}
 
-	await prisma.task.delete({
-		where: { id: taskId },
+	await prisma.task.deleteMany({
+		where: {
+			id: { in: taskIds },
+			userId,
+		},
 	})
 
 	revalidatePath('/tasks')

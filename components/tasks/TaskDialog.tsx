@@ -18,44 +18,39 @@ import {
 import CloseIcon from '@mui/icons-material/Close'
 import AddIcon from '@mui/icons-material/Add'
 import { Priority, Task } from '@/types/types'
-import { useTasks } from '@/contexts/TasksProvider'
 import { PriorityCircle } from '../common/PriorityCircle'
 import { addTask, updateTask } from '@/lib/actions/tasks'
+import { useDialog } from '@/contexts/DialogProvider'
 
-type Props = {
-	open: boolean
-	onClose: () => void
-	taskToEdit: Task | null
-}
+export default function TaskDialog({}) {
+	const { isDialogOpen, dialogOptions, closeDialog } = useDialog()
 
-export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 	const [title, setTitle] = useState('')
 	const [description, setDescription] = useState('')
 	const [priority, setPriority] = useState<Priority>('Medium')
 
-	const isEditing = !!taskToEdit
 	const canSubmit = !!title.trim()
+  const isEditing = dialogOptions.mode === 'Edit'
 
 	useEffect(() => {
-		if (!open) return
+    if (!isDialogOpen) return
 
 		if (isEditing) {
-			// Edit
-			setTitle(taskToEdit.title)
-			setDescription(taskToEdit.description)
-			setPriority(taskToEdit.priority)
+			const { title, description, priority } = dialogOptions.task
+			setTitle(title)
+			setDescription(description)
+			setPriority(priority)
 		} else {
-			// Add
 			setTitle('')
 			setDescription('')
 			setPriority('Medium')
 		}
-	}, [open, isEditing])
+	}, [dialogOptions])
 
 	const handleSubmit = async () => {
 		if (isEditing) {
 			await updateTask({
-				taskId: taskToEdit.id,
+				taskId: dialogOptions.task.id,
 				title,
 				description,
 				priority,
@@ -68,24 +63,22 @@ export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 			})
 		}
 
-		handleClose()
+    closeDialog()
 	}
 
-	const handleClose = async () => {
-		// Reset form
-		onClose()
-
-		// Added a small delay because of the dialog's closing transition
-		await new Promise((resolve) => setTimeout(resolve, 125))
-		setTitle('')
-		setDescription('')
-		setPriority('Medium')
-	}
+	// const handleClose = async () => {
+  //   closeDialog()
+	// 	// Added a small delay because of the dialog's closing transition
+	// 	await new Promise((resolve) => setTimeout(resolve, 125))
+	// 	setTitle('')
+	// 	setDescription('')
+	// 	setPriority('Medium')
+	// }
 
 	return (
 		<Dialog
-			open={open}
-			onClose={handleClose}
+			open={isDialogOpen}
+			onClose={closeDialog}
 			fullWidth
 			maxWidth="sm"
 			slotProps={{
@@ -109,7 +102,7 @@ export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 				<Typography variant="h6" fontWeight="bold">
 					{isEditing ? 'Edit Task' : 'Create New Task'}
 				</Typography>
-				<IconButton onClick={handleClose} size="small">
+				<IconButton onClick={closeDialog} size="small">
 					<CloseIcon />
 				</IconButton>
 			</DialogTitle>
@@ -166,7 +159,7 @@ export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 
 			<DialogActions sx={{ mb: 1.75, mr: 1.75, gap: 1 }}>
 				<Button
-					onClick={handleClose}
+					onClick={closeDialog}
 					variant="outlined"
 					color="inherit"
 					sx={{

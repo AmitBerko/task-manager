@@ -1,20 +1,19 @@
+"use client"
+
 import React, { useCallback, useState } from 'react'
 import TaskItem from './TaskItem'
 import { Box, Stack } from '@mui/material'
 import { Task } from '@/types/types'
-import { useTasks } from '@/contexts/TasksProvider'
 import MultiSelector from './MultiSelector'
 import NoTasksFound from './NoTasksFound'
 
 type Props = {
 	tasks: Task[]
-	openEditDialog: (task: Task) => void
 }
 
-function TaskList({ tasks, openEditDialog }: Props) {
+function TaskList({ tasks }: Props) {
 	const [selectedIds, setSelectedIds] = useState<string[]>([])
 	const [isMultiSelect, setIsMultiSelect] = useState(false)
-	const { deleteTask } = useTasks()
 
 	// Exact same function is passed to every task item so usecallback should be used
 	const handleSelect = useCallback((id: string, isChecked: boolean) => {
@@ -26,19 +25,12 @@ function TaskList({ tasks, openEditDialog }: Props) {
 		setIsMultiSelect((prev) => !prev)
 	}
 
-	const bulkDelete = () => {
-		selectedIds.forEach((id) => deleteTask(id))
-		setSelectedIds([])
-		setIsMultiSelect(false)
-	}
-
 	return (
 		<Box sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
 			<MultiSelector
 				isMultiSelect={isMultiSelect}
 				selectedIds={selectedIds}
 				toggleMultiSelect={toggleMultiSelect}
-				bulkDelete={bulkDelete}
 			/>
 			<Stack
 				rowGap={2.5}
@@ -64,8 +56,6 @@ function TaskList({ tasks, openEditDialog }: Props) {
 							key={task.id}
 							task={task}
 							handleSelect={handleSelect}
-							handleDelete={deleteTask}
-							openEditDialog={openEditDialog}
 							isMultiSelect={isMultiSelect}
 						/>
 					))

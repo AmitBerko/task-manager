@@ -6,12 +6,12 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import Wrapper from '@/components/common/Wrapper'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import { deleteTask } from '@/lib/actions/tasks'
+import { useDialog } from '@/contexts/DialogProvider'
 
 type Props = {
 	task: Task
 	handleSelect: (id: string, isChecked: boolean) => void
-	handleDelete: (id: string) => void
-	openEditDialog: (task: Task) => void
 	isMultiSelect: boolean
 }
 
@@ -19,9 +19,8 @@ export default memo(function TaskItem({
 	task: { id, title, description, priority, createdAt },
 	isMultiSelect,
 	handleSelect,
-	handleDelete,
-	openEditDialog,
 }: Props) {
+	const { openDialog } = useDialog()
 	return (
 		<Wrapper styles={{ p: 2 }}>
 			<Box display="flex" width="100%" alignItems="flex-start">
@@ -50,12 +49,14 @@ export default memo(function TaskItem({
 				{!isMultiSelect && (
 					<Box display="flex" alignItems="center" gap={1}>
 						<IconButton
-							onClick={() => openEditDialog({ id, title, description, priority, createdAt })}
+							onClick={() =>
+								openDialog({ mode: 'Edit', task: { id, title, description, priority, createdAt } })
+							}
 							size="small"
 						>
 							<EditIcon color="secondary" />
 						</IconButton>
-						<IconButton onClick={() => handleDelete(id)} size="small">
+						<IconButton onClick={() => deleteTask(id)} size="small">
 							<DeleteIcon color="secondary" />
 						</IconButton>
 					</Box>

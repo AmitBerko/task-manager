@@ -5,7 +5,7 @@ import TasksManager from '@/components/tasks/TasksManager'
 import { getTasks } from '@/lib/actions/tasks'
 
 export default async function TasksPage() {
-  const tasks = await getTasks()
+  // const tasks = await getTasks()
 
 	return (
 		<Container
@@ -18,7 +18,7 @@ export default async function TasksPage() {
 			}}
 		>
 			<Header />
-			<TasksManager tasks={tasks} />
+			<TasksManager />
 		</Container>
 	)
 }

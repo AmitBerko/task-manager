@@ -1,3 +1,4 @@
+import { bulkDeleteTasks } from '@/lib/actions/tasks'
 import { DeleteOutline, Deselect, SelectAll } from '@mui/icons-material'
 import { Box, Button, IconButton, Typography } from '@mui/material'
 import React from 'react'
@@ -6,15 +7,14 @@ type Props = {
 	isMultiSelect: boolean
 	selectedIds: string[]
 	toggleMultiSelect: () => void
-	bulkDelete: () => void
 }
 
-export default function MultiSelector({
-	isMultiSelect,
-	selectedIds,
-	toggleMultiSelect,
-	bulkDelete,
-}: Props) {
+export default function MultiSelector({ isMultiSelect, selectedIds, toggleMultiSelect }: Props) {
+	const handleBulkDelete = async () => {
+		await bulkDeleteTasks(selectedIds)
+		toggleMultiSelect()
+	}
+
 	return (
 		<Box
 			sx={{
@@ -49,7 +49,7 @@ export default function MultiSelector({
 							variant="contained"
 							color="error"
 							startIcon={<DeleteOutline />}
-							onClick={bulkDelete}
+							onClick={handleBulkDelete}
 							disabled={selectedIds.length === 0}
 							sx={{
 								textTransform: 'none',
