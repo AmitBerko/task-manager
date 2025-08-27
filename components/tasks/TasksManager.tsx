@@ -6,13 +6,13 @@ import ActionsBar from './ActionsBar'
 import TaskList from './TaskList/TaskList'
 import { Filter, Task } from '@/types/types'
 import TaskDialog from './TaskDialog'
-import { useTasks } from '@/contexts/TasksProvider'
+// import { useTasks } from '@/contexts/TasksProvider'
 
-export default function TasksManager() {
+export default function TasksManager({ tasks }: { tasks: Task[] }) {
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const [taskToEdit, setTaskToEdit] = useState<Task | null>(null)
 	const [filter, setFilter] = useState<Filter>({ search: '', priority: 'All' })
-	const { tasks } = useTasks()
+	// const { tasks } = useTasks()
 
 	const filteredTasks = useMemo(() => {
 		let filtered = tasks

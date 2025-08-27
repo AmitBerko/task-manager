@@ -2,11 +2,14 @@ export type ThemeMode = 'light' | 'dark'
 
 export type Priority = 'High' | 'Medium' | 'Low'
 
-export type Task = {
-	id: string
+export type TaskPayload = {
 	title: string
 	description: string
 	priority: Priority
+}
+
+export type Task = TaskPayload & {
+	id: string
 	createdAt: Date
 }
 

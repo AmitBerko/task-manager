@@ -19,6 +19,7 @@ export default function ThemeToggle() {
 				borderRadius: '12px',
 				bgcolor: 'background.paper',
 				border: `1px solid ${theme.palette.divider}`,
+        transition: 'none',
 				'&:hover .icon': {
 					transform: 'scale(1.1)',
 				},

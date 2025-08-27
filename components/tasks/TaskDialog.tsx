@@ -20,6 +20,7 @@ import AddIcon from '@mui/icons-material/Add'
 import { Priority, Task } from '@/types/types'
 import { useTasks } from '@/contexts/TasksProvider'
 import { PriorityCircle } from '../common/PriorityCircle'
+import { addTask, updateTask } from '@/lib/actions/tasks'
 
 type Props = {
 	open: boolean
@@ -31,8 +32,6 @@ export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 	const [title, setTitle] = useState('')
 	const [description, setDescription] = useState('')
 	const [priority, setPriority] = useState<Priority>('Medium')
-
-	const { addTask, updateTask } = useTasks()
 
 	const isEditing = !!taskToEdit
 	const canSubmit = !!title.trim()
@@ -53,17 +52,16 @@ export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 		}
 	}, [open, isEditing])
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		if (isEditing) {
-			// Edit existing task
-			updateTask(taskToEdit.id, {
+			await updateTask({
+				taskId: taskToEdit.id,
 				title,
 				description,
 				priority,
 			})
 		} else {
-			// Add new task
-			addTask({
+			await addTask({
 				title,
 				description,
 				priority,
@@ -77,7 +75,7 @@ export default function TaskDialog({ open, onClose, taskToEdit }: Props) {
 		// Reset form
 		onClose()
 
-    // Added a small delay because of the dialog's closing transition
+		// Added a small delay because of the dialog's closing transition
 		await new Promise((resolve) => setTimeout(resolve, 125))
 		setTitle('')
 		setDescription('')

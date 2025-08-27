@@ -2,12 +2,11 @@ import { Container } from '@mui/material'
 import React from 'react'
 import Header from '@/components/layout/Header'
 import TasksManager from '@/components/tasks/TasksManager'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '../api/auth/[...nextauth]/route'
+import { getTasks } from '@/lib/actions/tasks'
 
 export default async function TasksPage() {
-  const session = await getServerSession(authOptions)
-  console.log(session)
+  const tasks = await getTasks()
+
 	return (
 		<Container
 			maxWidth="md"
@@ -19,8 +18,7 @@ export default async function TasksPage() {
 			}}
 		>
 			<Header />
-			<TasksManager />
-      {JSON.stringify(session)}
+			<TasksManager tasks={tasks} />
 		</Container>
 	)
 }

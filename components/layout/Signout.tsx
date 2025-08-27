@@ -23,13 +23,14 @@ export default function Signout() {
 				borderRadius: '12px',
 				bgcolor: 'background.paper',
 				border: `1px solid ${theme.palette.divider}`,
+				transition: 'none',
 				'&:hover .icon': {
 					transform: 'scale(1.1)',
 				},
 			}}
 		>
 			{isLoading ? (
-				<CircularProgress size={20} />
+				<CircularProgress color="error" size={22} thickness={5} />
 			) : (
 				<LogoutIcon
 					className="icon"
