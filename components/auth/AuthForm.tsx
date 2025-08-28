@@ -1,6 +1,6 @@
 'use client'
 
-import { login, register } from '@/lib/actions/auth'
+import { register } from '@/lib/actions/auth'
 import { signIn } from 'next-auth/react'
 import {
 	Box,

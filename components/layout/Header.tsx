@@ -1,5 +1,4 @@
 import { Box, Typography } from '@mui/material'
-import ChecklistIcon from '@mui/icons-material/Checklist'
 import React from 'react'
 import ThemeToggle from './ThemeToggle'
 import Signout from './Signout'

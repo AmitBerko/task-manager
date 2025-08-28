@@ -33,7 +33,3 @@ export const register = async (formData: FormData): ActionResponse<User> => {
   console.log('weird response is ', response)
 	return { success: true, data: user }
 }
-
-export const login = async (formData: FormData) => {
-	return 'login!!'
-}

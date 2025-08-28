@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useTransition } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
 	Dialog,
 	DialogTitle,
@@ -23,7 +23,7 @@ import { addTask, updateTask } from '@/lib/actions/tasks'
 import { useDialog } from '@/contexts/DialogProvider'
 import LoadingButton from '../common/LoadingButton'
 
-export default function TaskDialog({}) {
+export default function TaskDialog() {
 	const { isDialogOpen, dialogOptions, closeDialog } = useDialog()
 
 	const [title, setTitle] = useState('')

@@ -1,8 +1,8 @@
 import LoadingButton from '@/components/common/LoadingButton'
 import { bulkDeleteTasks } from '@/lib/actions/tasks'
 import { DeleteOutline, Deselect, SelectAll } from '@mui/icons-material'
-import { Box, Button, IconButton, Typography } from '@mui/material'
-import React, { useTransition } from 'react'
+import { Box, IconButton, Typography } from '@mui/material'
+import React from 'react'
 
 type Props = {
 	isMultiSelect: boolean

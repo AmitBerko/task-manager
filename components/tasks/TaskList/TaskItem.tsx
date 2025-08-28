@@ -1,5 +1,5 @@
 import { Typography, IconButton, Checkbox, Box, CircularProgress } from '@mui/material'
-import { Priority, Task } from '@/types/types'
+import { Priority } from '@/types/types'
 import { memo, useTransition } from 'react'
 import { PriorityCircle } from '../../common/PriorityCircle'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -8,9 +8,10 @@ import Wrapper from '@/components/common/Wrapper'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import { deleteTask } from '@/lib/actions/tasks'
 import { useDialog } from '@/contexts/DialogProvider'
+import { Task } from '@prisma/client'
 
 type Props = {
-	task: Task
+	task: Omit<Task, 'userId'>
 	handleSelect: (id: string, isChecked: boolean) => void
 	isMultiSelect: boolean
 }
@@ -50,7 +51,7 @@ export default memo(function TaskItem({
 					<Box display="flex" alignItems="center" gap={1}>
 						<IconButton
 							onClick={() =>
-								openDialog({ mode: 'Edit', task: { id, title, description, priority, createdAt } })
+								openDialog({ mode: 'Edit', task: { title, description, priority, id, createdAt } })
 							}
 							size="small"
 						>

@@ -3,9 +3,9 @@
 import React, { useCallback, useState } from 'react'
 import TaskItem from './TaskItem'
 import { Box, Stack } from '@mui/material'
-import { Task } from '@/types/types'
 import MultiSelector from './MultiSelector'
 import NoTasksFound from './NoTasksFound'
+import { Task } from '@prisma/client'
 
 type Props = {
 	tasks: Task[]
