@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useTransition } from 'react'
 import {
 	Dialog,
 	DialogTitle,
@@ -17,10 +17,11 @@ import {
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import AddIcon from '@mui/icons-material/Add'
-import { Priority, Task } from '@/types/types'
+import { Priority } from '@/types/types'
 import { PriorityCircle } from '../common/PriorityCircle'
 import { addTask, updateTask } from '@/lib/actions/tasks'
 import { useDialog } from '@/contexts/DialogProvider'
+import LoadingButton from '../common/LoadingButton'
 
 export default function TaskDialog({}) {
 	const { isDialogOpen, dialogOptions, closeDialog } = useDialog()
@@ -30,10 +31,10 @@ export default function TaskDialog({}) {
 	const [priority, setPriority] = useState<Priority>('Medium')
 
 	const canSubmit = !!title.trim()
-  const isEditing = dialogOptions.mode === 'Edit'
+	const isEditing = dialogOptions.mode === 'Edit'
 
 	useEffect(() => {
-    if (!isDialogOpen) return
+		if (!isDialogOpen) return
 
 		if (isEditing) {
 			const { title, description, priority } = dialogOptions.task
@@ -63,17 +64,8 @@ export default function TaskDialog({}) {
 			})
 		}
 
-    closeDialog()
+		closeDialog()
 	}
-
-	// const handleClose = async () => {
-  //   closeDialog()
-	// 	// Added a small delay because of the dialog's closing transition
-	// 	await new Promise((resolve) => setTimeout(resolve, 125))
-	// 	setTitle('')
-	// 	setDescription('')
-	// 	setPriority('Medium')
-	// }
 
 	return (
 		<Dialog
@@ -168,15 +160,28 @@ export default function TaskDialog({}) {
 				>
 					Cancel
 				</Button>
-				<Button
-					onClick={handleSubmit}
-					variant="contained"
-					disabled={!canSubmit}
-					startIcon={<AddIcon />}
-				>
-					{isEditing ? 'Update' : 'Create'} Task
-				</Button>
+				<SubmitButton handleSubmit={handleSubmit} canSubmit={canSubmit} isEditing={isEditing} />
 			</DialogActions>
 		</Dialog>
+	)
+}
+
+type SubmitButtonProps = {
+	handleSubmit: () => Promise<void>
+	canSubmit: boolean
+	isEditing: boolean
+}
+
+function SubmitButton({ handleSubmit, canSubmit, isEditing }: SubmitButtonProps) {
+	return (
+		<LoadingButton
+			onClickAsync={handleSubmit}
+			sx={{ width: '150px' }}
+			variant="contained"
+			disabled={!canSubmit}
+			startIcon={<AddIcon />}
+		>
+			{isEditing ? 'Update Task' : 'Create Task'}
+		</LoadingButton>
 	)
 }

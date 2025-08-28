@@ -8,11 +8,6 @@ export type TaskPayload = {
 	priority: Priority
 }
 
-export type Task = TaskPayload & {
-	id: string
-	createdAt: Date
-}
-
 export type PriorityFilter = 'All' | 'High' | 'Medium' | 'Low'
 
 export type Filter = {

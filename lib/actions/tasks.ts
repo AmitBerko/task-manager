@@ -1,10 +1,11 @@
 'use server'
 
-import { Task, TaskPayload } from '@/types/types'
+import { TaskPayload } from '@/types/types'
 import { getServerSession } from 'next-auth'
 import { prisma } from '../prisma'
 import { revalidatePath } from 'next/cache'
 import { authOptions } from '../authOptions'
+import { Task } from '@prisma/client'
 
 export const getTasks = async (): Promise<Task[]> => {
 	const session = await getServerSession(authOptions)

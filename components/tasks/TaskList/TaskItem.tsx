@@ -1,6 +1,6 @@
-import { Typography, IconButton, Checkbox, Box } from '@mui/material'
+import { Typography, IconButton, Checkbox, Box, CircularProgress } from '@mui/material'
 import { Priority, Task } from '@/types/types'
-import { memo } from 'react'
+import { memo, useTransition } from 'react'
 import { PriorityCircle } from '../../common/PriorityCircle'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
@@ -56,15 +56,32 @@ export default memo(function TaskItem({
 						>
 							<EditIcon color="secondary" />
 						</IconButton>
-						<IconButton onClick={() => deleteTask(id)} size="small">
-							<DeleteIcon color="secondary" />
-						</IconButton>
+						<DeleteButton deleteTask={() => deleteTask(id)} />
 					</Box>
 				)}
 			</Box>
 		</Wrapper>
 	)
 })
+
+function DeleteButton({ deleteTask }: { deleteTask: () => Promise<void> }) {
+	const [isPending, startTransition] = useTransition()
+
+	return (
+		<IconButton
+			onClick={() => {
+				startTransition(async () => deleteTask())
+			}}
+			size="small"
+		>
+			{isPending ? (
+				<CircularProgress color="secondary" size={24} thickness={5} />
+			) : (
+				<DeleteIcon color="secondary" />
+			)}
+		</IconButton>
+	)
+}
 
 function TaskFooter({ priority, createdAt }: { priority: Priority; createdAt: Date }) {
 	return (

@@ -1,7 +1,8 @@
+import LoadingButton from '@/components/common/LoadingButton'
 import { bulkDeleteTasks } from '@/lib/actions/tasks'
 import { DeleteOutline, Deselect, SelectAll } from '@mui/icons-material'
 import { Box, Button, IconButton, Typography } from '@mui/material'
-import React from 'react'
+import React, { useTransition } from 'react'
 
 type Props = {
 	isMultiSelect: boolean
@@ -45,19 +46,10 @@ export default function MultiSelector({ isMultiSelect, selectedIds, toggleMultiS
 					</IconButton>
 				) : (
 					<>
-						<Button
-							variant="contained"
-							color="error"
-							startIcon={<DeleteOutline />}
-							onClick={handleBulkDelete}
-							disabled={selectedIds.length === 0}
-							sx={{
-								textTransform: 'none',
-								borderRadius: 2,
-							}}
-						>
-							Delete {selectedIds.length}
-						</Button>
+						<BulkDeleteButton
+							handleBulkDelete={handleBulkDelete}
+							selectedAmount={selectedIds.length}
+						/>
 						<IconButton
 							onClick={toggleMultiSelect}
 							sx={{
@@ -70,5 +62,28 @@ export default function MultiSelector({ isMultiSelect, selectedIds, toggleMultiS
 				)}
 			</Box>
 		</Box>
+	)
+}
+
+type BulkDeleteProps = {
+	handleBulkDelete: () => Promise<void>
+	selectedAmount: number
+}
+
+function BulkDeleteButton({ handleBulkDelete, selectedAmount }: BulkDeleteProps) {
+	return (
+		<LoadingButton
+			onClickAsync={handleBulkDelete}
+			startIcon={<DeleteOutline />}
+			variant="contained"
+			color="error"
+			disabled={selectedAmount === 0}
+			sx={{
+				textTransform: 'none',
+				borderRadius: 2,
+			}}
+		>
+			Delete {selectedAmount}
+		</LoadingButton>
 	)
 }
