@@ -1,6 +1,6 @@
-export type ThemeMode = 'light' | 'dark'
+import { Priority } from "@prisma/client"
 
-export type Priority = 'High' | 'Medium' | 'Low'
+export type ThemeMode = 'light' | 'dark'
 
 export type TaskPayload = {
 	title: string
@@ -8,7 +8,7 @@ export type TaskPayload = {
 	priority: Priority
 }
 
-export type PriorityFilter = 'All' | 'High' | 'Medium' | 'Low'
+export type PriorityFilter = 'All' | Priority
 
 export type Filter = {
 	search: string

@@ -17,11 +17,11 @@ import {
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import AddIcon from '@mui/icons-material/Add'
-import { Priority } from '@/types/types'
 import { PriorityCircle } from '../common/PriorityCircle'
 import { addTask, updateTask } from '@/lib/actions/tasks'
 import { useDialog } from '@/contexts/DialogProvider'
 import LoadingButton from '../common/LoadingButton'
+import { Priority } from '@prisma/client'
 
 export default function TaskDialog() {
 	const { isDialogOpen, dialogOptions, closeDialog } = useDialog()
@@ -46,7 +46,7 @@ export default function TaskDialog() {
 			setDescription('')
 			setPriority('Medium')
 		}
-	}, [dialogOptions])
+	}, [isDialogOpen, dialogOptions])
 
 	const handleSubmit = async () => {
 		if (isEditing) {
@@ -77,7 +77,7 @@ export default function TaskDialog() {
 				paper: {
 					sx: {
 						borderRadius: 2,
-						backgroundImage: 'none', // Remove the weird background color
+						backgroundImage: 'none'
 					},
 				},
 			}}

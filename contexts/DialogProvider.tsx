@@ -4,7 +4,7 @@ import TaskDialog from '@/components/tasks/TaskDialog'
 import { Task } from '@prisma/client';
 import { createContext, useContext, useState, type ReactNode } from 'react'
 
-type DialogOptions = { mode: 'Create' } | { mode: 'Edit'; task: Omit<Task, 'userId'> }
+type DialogOptions = { mode: 'Create' } | { mode: 'Edit'; task: Task }
 
 type DialogContextType = {
 	isDialogOpen: boolean

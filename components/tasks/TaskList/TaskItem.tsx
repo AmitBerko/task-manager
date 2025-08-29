@@ -1,27 +1,23 @@
-import { Typography, IconButton, Checkbox, Box, CircularProgress } from '@mui/material'
-import { Priority } from '@/types/types'
 import { memo, useTransition } from 'react'
-import { PriorityCircle } from '../../common/PriorityCircle'
+import { Typography, IconButton, Checkbox, Box, CircularProgress } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-import Wrapper from '@/components/common/Wrapper'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import { Task, Priority } from '@prisma/client'
+import { PriorityCircle } from '@/components/common/PriorityCircle'
+import Wrapper from '@/components/common/Wrapper'
 import { deleteTask } from '@/lib/actions/tasks'
 import { useDialog } from '@/contexts/DialogProvider'
-import { Task } from '@prisma/client'
 
 type Props = {
-	task: Omit<Task, 'userId'>
+	task: Task
 	handleSelect: (id: string, isChecked: boolean) => void
 	isMultiSelect: boolean
 }
 
-export default memo(function TaskItem({
-	task: { id, title, description, priority, createdAt },
-	isMultiSelect,
-	handleSelect,
-}: Props) {
+export default memo(function TaskItem({ task, isMultiSelect, handleSelect }: Props) {
 	const { openDialog } = useDialog()
+	const { id, priority, title, description, createdAt } = task
 	return (
 		<Wrapper styles={{ p: 2 }}>
 			<Box display="flex" width="100%" alignItems="flex-start">
@@ -49,12 +45,7 @@ export default memo(function TaskItem({
 				</Box>
 				{!isMultiSelect && (
 					<Box display="flex" alignItems="center" gap={1}>
-						<IconButton
-							onClick={() =>
-								openDialog({ mode: 'Edit', task: { title, description, priority, id, createdAt } })
-							}
-							size="small"
-						>
+						<IconButton onClick={() => openDialog({ mode: 'Edit', task })} size="small">
 							<EditIcon color="secondary" />
 						</IconButton>
 						<DeleteButton deleteTask={() => deleteTask(id)} />

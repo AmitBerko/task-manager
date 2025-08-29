@@ -1,5 +1,5 @@
-import { Priority } from "@/types/types"
 import { Box } from "@mui/material"
+import { Priority } from "@prisma/client"
 
 export function PriorityCircle({ priority }: { priority: Priority }) {
   const getPriorityColor = (priority: string) => {
