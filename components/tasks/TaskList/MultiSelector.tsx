@@ -1,8 +1,7 @@
-import LoadingButton from '@/components/common/LoadingButton'
 import { bulkDeleteTasks } from '@/lib/actions/tasks'
 import { DeleteOutline, Deselect, SelectAll } from '@mui/icons-material'
-import { Box, IconButton, Typography } from '@mui/material'
-import React from 'react'
+import { Box, Button, IconButton, Typography } from '@mui/material'
+import React, { useTransition } from 'react'
 
 type Props = {
 	isMultiSelect: boolean
@@ -71,9 +70,16 @@ type BulkDeleteProps = {
 }
 
 function BulkDeleteButton({ handleBulkDelete, selectedAmount }: BulkDeleteProps) {
+	const [isPending, startTransition] = useTransition()
+
 	return (
-		<LoadingButton
-			onClickAsync={handleBulkDelete}
+		<Button
+			loading={isPending}
+			onClick={() =>
+				startTransition(async () => {
+					await handleBulkDelete()
+				})
+			}
 			startIcon={<DeleteOutline />}
 			variant="contained"
 			color="error"
@@ -84,6 +90,6 @@ function BulkDeleteButton({ handleBulkDelete, selectedAmount }: BulkDeleteProps)
 			}}
 		>
 			Delete {selectedAmount}
-		</LoadingButton>
+		</Button>
 	)
 }

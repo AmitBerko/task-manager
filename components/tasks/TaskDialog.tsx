@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useTransition } from 'react'
 import {
 	Dialog,
 	DialogTitle,
@@ -77,7 +77,7 @@ export default function TaskDialog() {
 				paper: {
 					sx: {
 						borderRadius: 2,
-						backgroundImage: 'none'
+						backgroundImage: 'none',
 					},
 				},
 			}}
@@ -173,15 +173,22 @@ type SubmitButtonProps = {
 }
 
 function SubmitButton({ handleSubmit, canSubmit, isEditing }: SubmitButtonProps) {
+	const [isPending, startTransition] = useTransition()
+
 	return (
-		<LoadingButton
-			onClickAsync={handleSubmit}
+		<Button
+			loading={isPending}
+			onClick={() =>
+				startTransition(async () => {
+					await handleSubmit()
+				})
+			}
 			sx={{ width: '150px' }}
 			variant="contained"
 			disabled={!canSubmit}
 			startIcon={<AddIcon />}
 		>
 			{isEditing ? 'Update Task' : 'Create Task'}
-		</LoadingButton>
+		</Button>
 	)
 }
