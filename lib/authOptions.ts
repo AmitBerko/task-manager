@@ -21,12 +21,12 @@ export const authOptions: AuthOptions = {
 				})
 
 				if (!user) {
-					throw new Error('No user found with this email')
+					throw new Error('Invalid email or password')
 				}
 
 				const isValid = await bcrypt.compare(credentials.password, user.password)
 				if (!isValid) {
-					throw new Error('Invalid password')
+					throw new Error('Invalid email or password')
 				}
 
 				return { id: user.id, email: user.email }

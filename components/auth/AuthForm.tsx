@@ -1,121 +1,195 @@
 'use client'
 
+import React from 'react'
+import { Box, Typography, Link, TextField, Button, CircularProgress } from '@mui/material'
+import { useFormik } from 'formik'
+import { loginSchema, registerSchema } from '@/lib/validations'
 import { register } from '@/lib/actions/auth'
 import { signIn } from 'next-auth/react'
-import {
-	Box,
-	Paper,
-	Typography,
-	TextField,
-	Button,
-	Stack,
-	Alert,
-	CircularProgress,
-} from '@mui/material'
-import { useState } from 'react'
-import { useFormStatus } from 'react-dom'
 import { useRouter } from 'next/navigation'
+import Wrapper from '../common/Wrapper'
 
 type Props = {
 	mode: 'login' | 'register'
 }
 
 export default function AuthForm({ mode }: Props) {
-	const [error, setError] = useState('')
-	const isRegister = mode === 'register'
-  const router = useRouter()
+	const router = useRouter()
+	const isLogin = mode === 'login'
 
-	const handleSubmit = async (formData: FormData) => {
-		if (isRegister) {
-			const response = await register(formData)
-			console.log('register response', response)
-		} else {
-			const response = await signIn('credentials', {
-				redirect: false,
-				email: formData.get('email') as string,
-				password: formData.get('password') as string,
-			})
-      if (!response?.ok) {
-        setError(response?.error ?? 'Login failed')
-      } else {
-        router.push('/tasks')
-      }
+	const formik = useFormik({
+		initialValues: {
+			email: '',
+			password: '',
+			confirmPassword: '',
+		},
+		onSubmit: async (values, { setErrors }) => {
+			console.log('testtttt', values)
+			if (isLogin) {
+				const { email, password } = values
+				const response = await signIn('credentials', {
+					redirect: false,
+					email,
+					password,
+				})
+				if (response?.error) {
+					setErrors({ password: response.error })
+					return
+				}
+				router.push('/tasks')
+			} else {
+				const response = await register(values)
+				if (!response.success) {
+					setErrors({ email: response.error })
+					return
+				}
+				const { email, confirmPassword, password } = values
 
-			console.log('signin response', response)
-		}
-	}
+				// Login right after registering
+				const loginResponse = await signIn('credentials', {
+					redirect: false,
+					email,
+					password,
+					confirmPassword,
+				})
+				if (loginResponse?.error) {
+					setErrors({ password: loginResponse.error })
+					return
+				}
+				router.push('/tasks')
+			}
+		},
+		validationSchema: isLogin ? loginSchema : registerSchema,
+	})
 
 	return (
-		<Paper
-			component="form"
-			action={handleSubmit}
-			sx={{
-				borderRadius: 2,
-				backgroundImage: 'none',
-				p: 4,
-				maxWidth: 400,
-				width: '100%',
-				mx: 'auto',
+		<Wrapper
+			styles={{
+				flexDirection: 'column',
+				maxWidth: '400px',
+				p: { xs: 3, sm: 4 },
 			}}
 		>
-			<Typography variant="h5" fontWeight="bold" textAlign="center" mb={3}>
-				{isRegister ? 'Create Account' : 'Sign In'}
-			</Typography>
+			{/* Header */}
+			<Box sx={{ textAlign: 'center', mb: 4 }}>
+				<Typography
+					variant="h4"
+					sx={{
+						fontWeight: 'bold',
+						mb: 1,
+						fontSize: { xs: '1.65rem', sm: '1.9rem' },
+					}}
+				>
+					Task Manager
+				</Typography>
+				<Typography
+					variant="body2"
+					sx={{
+						color: 'text.secondary',
+						fontSize: '0.9rem',
+					}}
+				>
+					{isLogin ? 'Sign in' : 'Register'} to track your tasks
+				</Typography>
+			</Box>
 
-			{error && (
-				<Alert severity="error" sx={{ mb: 3 }}>
-					{error}
-				</Alert>
-			)}
-
-			<Stack spacing={3}>
+			{/* Form */}
+			<Box
+				component="form"
+				onSubmit={formik.handleSubmit}
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 2.5,
+				}}
+			>
 				<TextField
-					label="Email Address"
-					// type="email"
-					name="email"
-					fullWidth
+					value={formik.values.email}
+					onChange={formik.handleChange}
+					onBlur={formik.handleBlur}
+					error={formik.touched.email && Boolean(formik.errors.email)}
+					helperText={formik.touched.email && formik.errors.email}
 					variant="outlined"
+					name="email"
+					label="Email"
+					type="email"
+					fullWidth
 				/>
 
-				<TextField label="Password" type="password" name="password" fullWidth variant="outlined" />
+				<TextField
+					value={formik.values.password}
+					onChange={formik.handleChange}
+					onBlur={formik.handleBlur}
+					error={formik.touched.password && Boolean(formik.errors.password)}
+					helperText={formik.touched.password && formik.errors.password}
+					variant="outlined"
+					name="password"
+					label="Password"
+					type="password"
+					fullWidth
+				/>
 
-				{isRegister && (
+				{!isLogin && (
 					<TextField
-						label="Confirm Password"
-						type="password"
-						name="confirm-password"
-						fullWidth
+						value={formik.values.confirmPassword}
+						onChange={formik.handleChange}
+						onBlur={formik.handleBlur}
+						error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+						helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
 						variant="outlined"
+						name="confirmPassword"
+						label="Confirm password"
+						type="password"
+						fullWidth
 					/>
 				)}
-			</Stack>
 
-			<SubmitButton isRegister={isRegister} />
-
-			<Box textAlign="center" mt={3}>
-				<Typography variant="body2" color="text.secondary">
-					{isRegister ? 'Already have an account?' : "Don't have an account?"}
-				</Typography>
-				<Button href={isRegister ? '/login' : '/register'} variant="text" sx={{ mt: 0.5 }}>
-					{isRegister ? 'Sign In' : 'Create Account'}
+				<Button
+					loading={formik.isSubmitting}
+					loadingIndicator={<CircularProgress size={25} thickness={4.5} color="inherit" />}
+					type="submit"
+					variant="contained"
+					disabled={!formik.isValid || formik.isSubmitting}
+					fullWidth
+					color="primary"
+					sx={{
+						py: 1.5,
+						fontSize: '1rem',
+						fontWeight: 'bold',
+						textTransform: 'none',
+						mt: 1,
+					}}
+				>
+					{isLogin ? 'Sign in' : 'Create account'}
 				</Button>
 			</Box>
-		</Paper>
-	)
-}
 
-function SubmitButton({ isRegister }: { isRegister: boolean }) {
-	const { pending } = useFormStatus()
-
-	return (
-		<Button type="submit" variant="contained" fullWidth sx={{ py: 1.5, mt: 2, fontWeight: 'bold' }}>
-			{pending ? (
-				<CircularProgress size={24} thickness={5} color="inherit" />
-			) : isRegister ? (
-				'Create Account'
-			) : (
-				'Sign In'
-			)}
-		</Button>
+			<Box
+				sx={{ textAlign: 'center', mt: 4, pt: 3, borderTop: '1px solid', borderColor: 'divider' }}
+			>
+				<Typography
+					variant="body2"
+					sx={{
+						color: 'text.secondary',
+						fontSize: '0.85rem',
+					}}
+				>
+					{isLogin ? "Don't have an account? " : 'Already have an account? '}
+					<Link
+						href={isLogin ? '/register' : '/login'}
+						sx={{
+							color: 'primary.main',
+							textDecoration: 'none',
+							fontWeight: 'bold',
+							'&:hover': {
+								textDecoration: 'underline',
+							},
+						}}
+					>
+						{isLogin ? 'Sign up' : 'Sign in'}
+					</Link>
+				</Typography>
+			</Box>
+		</Wrapper>
 	)
 }
