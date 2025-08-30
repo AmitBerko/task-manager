@@ -1,11 +1,13 @@
 'use server'
 
-import { TaskPayload } from '@/types/types'
+import { ActionResponse, TaskPayload } from '@/types/types'
 import { getServerSession } from 'next-auth'
 import { prisma } from '../prisma'
 import { revalidatePath } from 'next/cache'
 import { authOptions } from '../authOptions'
 import { Task } from '@prisma/client'
+import { taskSchema } from '../validations'
+import { ValidationError } from 'yup'
 
 export const getTasks = async (): Promise<Task[]> => {
 	const session = await getServerSession(authOptions)
@@ -23,22 +25,31 @@ export const getTasks = async (): Promise<Task[]> => {
 	return tasks
 }
 
-export const addTask = async ({ title, description, priority }: TaskPayload): Promise<Task> => {
-	const session = await getServerSession(authOptions)
-	const userId = session?.user.id
+export const addTask = async ({
+	title,
+	description,
+	priority,
+}: TaskPayload): ActionResponse<Task> => {
+	try {
+		await taskSchema.validate({ title, description, priority })
+		const session = await getServerSession(authOptions)
+		const userId = session?.user.id
 
-	if (!userId) {
-		throw new Error('Authentication required')
+		if (!userId) {
+			throw new Error('Authentication required')
+		}
+
+		const task = await prisma.task.create({ data: { title, description, priority, userId } })
+
+		revalidatePath('/tasks')
+		return { success: true, data: task }
+	} catch (error) {
+		if (error instanceof ValidationError) {
+			return { success: false, error: error.message }
+		} else {
+			return { success: false, error: `Something went wrong: ${error}` }
+		}
 	}
-
-	if (!title || !priority || !['High', 'Medium', 'Low'].includes(priority)) {
-		throw new Error('Invalid input')
-	}
-
-	const task = await prisma.task.create({ data: { title, description, priority, userId } })
-
-	revalidatePath('/tasks')
-	return task
 }
 
 export const updateTask = async ({
@@ -46,31 +57,32 @@ export const updateTask = async ({
 	title,
 	description,
 	priority,
-}: TaskPayload & { taskId: string }): Promise<Task> => {
-	const session = await getServerSession(authOptions)
-	const userId = session?.user.id
+}: TaskPayload & { taskId: string }): ActionResponse<Task> => {
+	try {
+		await taskSchema.validate({ title, description, priority })
+		const session = await getServerSession(authOptions)
+		const userId = session?.user.id
 
-	if (!userId) {
-		throw new Error('Authentication required')
+		if (!userId) {
+			throw new Error('Authentication required')
+		}
+
+		const user = await prisma.user.findUnique({ where: { id: userId }, select: { tasks: true } })
+
+		if (!user?.tasks.find((task) => task.id === taskId)) {
+			throw new Error('Task not found or access denied')
+		}
+
+		const task = await prisma.task.update({
+			where: { id: taskId },
+			data: { title, description, priority },
+		})
+
+		revalidatePath('/tasks')
+		return { success: true, data: task }
+	} catch (error) {
+		return { success: false, error: `Something went wrong: ${error}` }
 	}
-
-	if (!title || !priority || !['High', 'Medium', 'Low'].includes(priority)) {
-		throw new Error('Invalid input')
-	}
-
-	const user = await prisma.user.findUnique({ where: { id: userId }, select: { tasks: true } })
-
-	if (!user?.tasks.find((task) => task.id === taskId)) {
-		throw new Error('Task not found or access denied')
-	}
-
-	const task = await prisma.task.update({
-		where: { id: taskId },
-		data: { title, description, priority },
-	})
-
-	revalidatePath('/tasks')
-	return task
 }
 
 export const deleteTask = async (taskId: string) => {

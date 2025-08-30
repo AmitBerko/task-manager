@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useTransition } from 'react'
+import React from 'react'
 import {
 	Dialog,
 	DialogTitle,
@@ -14,57 +14,58 @@ import {
 	Typography,
 	Box,
 	IconButton,
+	CircularProgress,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import AddIcon from '@mui/icons-material/Add'
 import { PriorityCircle } from '../common/PriorityCircle'
 import { addTask, updateTask } from '@/lib/actions/tasks'
 import { useDialog } from '@/contexts/DialogProvider'
-import { Priority } from '@prisma/client'
+import { useFormik } from 'formik'
+import { TaskPayload } from '@/types/types'
+import { taskSchema } from '@/lib/validations'
 
 export default function TaskDialog() {
 	const { isDialogOpen, dialogOptions, closeDialog } = useDialog()
-
-	const [title, setTitle] = useState('')
-	const [description, setDescription] = useState('')
-	const [priority, setPriority] = useState<Priority>('Medium')
-
-	const canSubmit = !!title.trim()
 	const isEditing = dialogOptions.mode === 'Edit'
 
-	useEffect(() => {
-		if (!isDialogOpen) return
+	const formik = useFormik<TaskPayload>({
+		initialValues: {
+			title: '',
+			description: '',
+			priority: 'Medium',
+		},
+		onSubmit: async ({ title, description, priority }) => {
+			if (isEditing) {
+				const response = await updateTask({
+					taskId: dialogOptions.task.id,
+					title,
+					description,
+					priority,
+				})
 
-		if (isEditing) {
-			const { title, description, priority } = dialogOptions.task
-			setTitle(title)
-			setDescription(description)
-			setPriority(priority)
-		} else {
-			setTitle('')
-			setDescription('')
-			setPriority('Medium')
-		}
-	}, [isDialogOpen, dialogOptions, isEditing])
+				if (response.success) {
+					console.log('Added task: ', response.data)
+				} else {
+					console.log('Error is: ', response.error)
+				}
+			} else {
+				const response = await addTask({
+					title,
+					description,
+					priority,
+				})
+				if (response.success) {
+					console.log('Updated task: ', response.data)
+				} else {
+					console.log('Error is: ', response.error)
+				}
+			}
 
-	const handleSubmit = async () => {
-		if (isEditing) {
-			await updateTask({
-				taskId: dialogOptions.task.id,
-				title,
-				description,
-				priority,
-			})
-		} else {
-			await addTask({
-				title,
-				description,
-				priority,
-			})
-		}
-
-		closeDialog()
-	}
+			closeDialog()
+		},
+		validationSchema: taskSchema,
+	})
 
 	return (
 		<Dialog
@@ -97,97 +98,92 @@ export default function TaskDialog() {
 					<CloseIcon />
 				</IconButton>
 			</DialogTitle>
+			<form onSubmit={formik.handleSubmit}>
+				<DialogContent sx={{ px: 3 }}>
+					<Stack spacing={3}>
+						<TextField
+							fullWidth
+							variant="outlined"
+							label="Task Title"
+							name="title"
+							value={formik.values.title}
+							error={formik.touched.title && Boolean(formik.errors.title)}
+							helperText={formik.touched.title && formik.errors.title}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}
+						/>
 
-			<DialogContent sx={{ px: 3 }}>
-				<Stack spacing={3} mt={1}>
-					<TextField
-						label="Task Title"
-						fullWidth
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
+						<TextField
+							fullWidth
+							variant="outlined"
+							label="Description (Optional)"
+							name="description"
+							value={formik.values.description}
+							error={formik.touched.description && Boolean(formik.errors.description)}
+							helperText={formik.touched.description && formik.errors.description}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}
+						/>
+
+						<FormControl fullWidth>
+							<InputLabel>Priority Level</InputLabel>
+							<Select
+								name="priority"
+								value={formik.values.priority}
+								label="Priority Level"
+								onChange={formik.handleChange}
+							>
+								<MenuItem value="High">
+									<Box display="flex" alignItems="center" gap={1}>
+										<PriorityCircle priority="High" />
+										<Typography>High Priority</Typography>
+									</Box>
+								</MenuItem>
+								<MenuItem value="Medium">
+									<Box display="flex" alignItems="center" gap={1}>
+										<PriorityCircle priority="Medium" />
+										<Typography>Medium Priority</Typography>
+									</Box>
+								</MenuItem>
+								<MenuItem value="Low">
+									<Box display="flex" alignItems="center" gap={1}>
+										<PriorityCircle priority="Low" />
+										<Typography>Low Priority</Typography>
+									</Box>
+								</MenuItem>
+							</Select>
+						</FormControl>
+					</Stack>
+				</DialogContent>
+
+				<DialogActions sx={{ mb: 1.75, mr: 1.75, gap: 1 }}>
+					<Button
+						onClick={closeDialog}
 						variant="outlined"
-					/>
-
-					<TextField
-						label="Description (Optional)"
+						color="inherit"
+						sx={{
+							borderColor: 'divider',
+						}}
+					>
+						Cancel
+					</Button>
+					<Button
+						startIcon={<AddIcon />}
+						loading={formik.isSubmitting}
+						loadingIndicator={<CircularProgress size={25} thickness={4.5} color="inherit" />}
+						type="submit"
+						variant="contained"
+						disabled={!formik.isValid || formik.isSubmitting}
 						fullWidth
-						multiline
-						rows={4}
-						value={description}
-						onChange={(e) => setDescription(e.target.value)}
-						variant="outlined"
-					/>
-
-					<FormControl fullWidth>
-						<InputLabel>Priority Level</InputLabel>
-						<Select
-							value={priority}
-							label="Priority Level"
-							onChange={(e) => setPriority(e.target.value as Priority)}
-						>
-							<MenuItem value="High">
-								<Box display="flex" alignItems="center" gap={1}>
-									<PriorityCircle priority="High" />
-									<Typography>High Priority</Typography>
-								</Box>
-							</MenuItem>
-							<MenuItem value="Medium">
-								<Box display="flex" alignItems="center" gap={1}>
-									<PriorityCircle priority="Medium" />
-									<Typography>Medium Priority</Typography>
-								</Box>
-							</MenuItem>
-							<MenuItem value="Low">
-								<Box display="flex" alignItems="center" gap={1}>
-									<PriorityCircle priority="Low" />
-									<Typography>Low Priority</Typography>
-								</Box>
-							</MenuItem>
-						</Select>
-					</FormControl>
-				</Stack>
-			</DialogContent>
-
-			<DialogActions sx={{ mb: 1.75, mr: 1.75, gap: 1 }}>
-				<Button
-					onClick={closeDialog}
-					variant="outlined"
-					color="inherit"
-					sx={{
-						borderColor: 'divider',
-					}}
-				>
-					Cancel
-				</Button>
-				<SubmitButton handleSubmit={handleSubmit} canSubmit={canSubmit} isEditing={isEditing} />
-			</DialogActions>
+						color="primary"
+						sx={{
+							width: '150px',
+						}}
+					>
+						{isEditing ? 'Update Task' : 'Create Task'}
+					</Button>
+				</DialogActions>
+			</form>
 		</Dialog>
-	)
-}
-
-type SubmitButtonProps = {
-	handleSubmit: () => Promise<void>
-	canSubmit: boolean
-	isEditing: boolean
-}
-
-function SubmitButton({ handleSubmit, canSubmit, isEditing }: SubmitButtonProps) {
-	const [isPending, startTransition] = useTransition()
-
-	return (
-		<Button
-			loading={isPending}
-			onClick={() =>
-				startTransition(async () => {
-					await handleSubmit()
-				})
-			}
-			sx={{ width: '150px' }}
-			variant="contained"
-			disabled={!canSubmit}
-			startIcon={<AddIcon />}
-		>
-			{isEditing ? 'Update Task' : 'Create Task'}
-		</Button>
 	)
 }

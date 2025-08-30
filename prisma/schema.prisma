@@ -23,7 +23,7 @@ enum Priority {
 model Task {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
-  description String
+  description String?
   createdAt   DateTime @default(now())
   priority    Priority
   userId      String   @db.ObjectId

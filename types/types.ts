@@ -4,7 +4,7 @@ export type ThemeMode = 'light' | 'dark'
 
 export type TaskPayload = {
 	title: string
-	description: string
+	description?: string
 	priority: Priority
 }
 
