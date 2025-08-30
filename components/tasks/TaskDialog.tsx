@@ -20,7 +20,6 @@ import AddIcon from '@mui/icons-material/Add'
 import { PriorityCircle } from '../common/PriorityCircle'
 import { addTask, updateTask } from '@/lib/actions/tasks'
 import { useDialog } from '@/contexts/DialogProvider'
-import LoadingButton from '../common/LoadingButton'
 import { Priority } from '@prisma/client'
 
 export default function TaskDialog() {
@@ -46,7 +45,7 @@ export default function TaskDialog() {
 			setDescription('')
 			setPriority('Medium')
 		}
-	}, [isDialogOpen, dialogOptions])
+	}, [isDialogOpen, dialogOptions, isEditing])
 
 	const handleSubmit = async () => {
 		if (isEditing) {
