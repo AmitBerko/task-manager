@@ -170,7 +170,7 @@ export default function TaskDialog() {
 					<Button
 						startIcon={<AddIcon />}
 						loading={formik.isSubmitting}
-						loadingIndicator={<CircularProgress size={25} thickness={4.5} color="inherit" />}
+						loadingIndicator={<CircularProgress size={23} thickness={4.5} color="inherit" />}
 						type="submit"
 						variant="contained"
 						disabled={!formik.isValid || formik.isSubmitting}
