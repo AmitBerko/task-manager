@@ -1,13 +1,14 @@
 'use client'
 
 import React from 'react'
-import { Box, Typography, Link, TextField, Button, CircularProgress } from '@mui/material'
+import { Box, Typography, TextField, Button, CircularProgress } from '@mui/material'
 import { useFormik } from 'formik'
 import { loginSchema, registerSchema } from '@/lib/validations'
 import { register } from '@/lib/actions/auth'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Wrapper from '../common/Wrapper'
+import Link from 'next/link'
 
 type Props = {
 	mode: 'login' | 'register'
@@ -175,18 +176,18 @@ export default function AuthForm({ mode }: Props) {
 					}}
 				>
 					{isLogin ? "Don't have an account? " : 'Already have an account? '}
-					<Link
-						href={isLogin ? '/register' : '/login'}
-						sx={{
-							color: 'primary.main',
-							textDecoration: 'none',
-							fontWeight: 'bold',
-							'&:hover': {
-								textDecoration: 'underline',
-							},
-						}}
-					>
-						{isLogin ? 'Sign up' : 'Sign in'}
+					<Link style={{ textDecoration: 'none' }} href={isLogin ? '/register' : '/login'}>
+						<Typography
+							component="span"
+							sx={{
+								color: 'primary.main',
+								textDecoration: 'none',
+								fontWeight: 'bold',
+								'&:hover': { textDecoration: 'underline' },
+							}}
+						>
+							{isLogin ? 'Sign up' : 'Sign in'}
+						</Typography>
 					</Link>
 				</Typography>
 			</Box>
