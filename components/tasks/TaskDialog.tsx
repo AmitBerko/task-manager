@@ -30,11 +30,18 @@ export default function TaskDialog() {
 	const isEditing = dialogOptions.mode === 'Edit'
 
 	const formik = useFormik<TaskPayload>({
-		initialValues: {
-			title: '',
-			description: '',
-			priority: 'Medium',
-		},
+		initialValues: isEditing
+			? {
+					title: dialogOptions.task.title,
+					description: dialogOptions.task.description ?? '',
+					priority: dialogOptions.task.priority,
+			  }
+			: {
+					title: '',
+					description: '',
+					priority: 'Medium',
+			  },
+		enableReinitialize: true,
 		onSubmit: async ({ title, description, priority }) => {
 			if (isEditing) {
 				const response = await updateTask({
@@ -71,6 +78,7 @@ export default function TaskDialog() {
 		<Dialog
 			open={isDialogOpen}
 			onClose={closeDialog}
+			onTransitionExited={formik.resetForm}
 			fullWidth
 			maxWidth="sm"
 			slotProps={{
