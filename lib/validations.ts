@@ -12,8 +12,8 @@ export const registerSchema = loginSchema.concat(
 )
 
 export const taskSchema = Yup.object({
-	title: Yup.string().required('Title is required'),
-  description: Yup.string(),
+	title: Yup.string().trim('Title cannot be empty').required('Title is required'),
+	description: Yup.string(),
 	priority: Yup.string()
 		.oneOf(['High', 'Medium', 'Low'], 'Priority must be High/Medium/low')
 		.required('Priority is required'),
