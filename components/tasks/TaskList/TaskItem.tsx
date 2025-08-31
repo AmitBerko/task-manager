@@ -64,6 +64,7 @@ function DeleteButton({ deleteTask }: { deleteTask: () => Promise<void> }) {
 			onClick={() => {
 				startTransition(async () => deleteTask())
 			}}
+			disabled={isPending}
 			size="small"
 		>
 			{isPending ? (
