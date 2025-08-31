@@ -18,7 +18,7 @@ import {
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import AddIcon from '@mui/icons-material/Add'
-import { PriorityCircle } from '../common/PriorityCircle'
+import { PriorityCircle } from '../ui/PriorityCircle'
 import { addTask, updateTask } from '@/lib/actions/tasks'
 import { useDialog } from '@/contexts/DialogProvider'
 import { useFormik } from 'formik'

@@ -4,8 +4,8 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import { Task, Priority } from '@prisma/client'
-import { PriorityCircle } from '@/components/common/PriorityCircle'
-import Wrapper from '@/components/common/Wrapper'
+import { PriorityCircle } from '@/components/ui/PriorityCircle'
+import { Wrapper } from '@/components/ui/Wrapper'
 import { deleteTask } from '@/lib/actions/tasks'
 import { useDialog } from '@/contexts/DialogProvider'
 
@@ -19,7 +19,7 @@ export default memo(function TaskItem({ task, isMultiSelect, handleSelect }: Pro
 	const { openDialog } = useDialog()
 	const { id, priority, title, description, createdAt } = task
 	return (
-		<Wrapper styles={{ p: 2 }}>
+		<Wrapper sx={{ p: 2 }}>
 			<Box display="flex" width="100%" alignItems="flex-start">
 				{isMultiSelect && (
 					<Checkbox

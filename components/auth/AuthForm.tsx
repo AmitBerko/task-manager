@@ -7,7 +7,7 @@ import { loginSchema, registerSchema } from '@/lib/validations'
 import { register } from '@/lib/actions/auth'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import Wrapper from '../common/Wrapper'
+import { Wrapper } from '../ui/Wrapper'
 import Link from 'next/link'
 
 type Props = {
@@ -65,10 +65,12 @@ export default function AuthForm({ mode }: Props) {
 
 	return (
 		<Wrapper
-			styles={{
+			sx={{
 				flexDirection: 'column',
-				maxWidth: '400px',
+				maxWidth: '435px',
 				p: { xs: 3, sm: 4 },
+				boxShadow: (theme) =>
+					`0 20px 40px rgba(0, 0, 0, ${theme.palette.mode === 'dark' ? '0.4' : '0.1'})`,
 			}}
 		>
 			{/* Header */}
