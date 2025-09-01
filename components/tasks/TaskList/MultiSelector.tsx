@@ -1,20 +1,20 @@
+import { bulkDeleteTasks } from '@/lib/actions/tasks'
 import { DeleteOutline, Deselect, SelectAll } from '@mui/icons-material'
 import { Box, Button, IconButton, Typography } from '@mui/material'
-import React from 'react'
+import React, { useTransition } from 'react'
 
 type Props = {
 	isMultiSelect: boolean
 	selectedIds: string[]
 	toggleMultiSelect: () => void
-	bulkDelete: () => void
 }
 
-export default function MultiSelector({
-	isMultiSelect,
-	selectedIds,
-	toggleMultiSelect,
-	bulkDelete,
-}: Props) {
+export default function MultiSelector({ isMultiSelect, selectedIds, toggleMultiSelect }: Props) {
+	const handleBulkDelete = async () => {
+		await bulkDeleteTasks(selectedIds)
+		toggleMultiSelect()
+	}
+
 	return (
 		<Box
 			sx={{
@@ -45,19 +45,10 @@ export default function MultiSelector({
 					</IconButton>
 				) : (
 					<>
-						<Button
-							variant="contained"
-							color="error"
-							startIcon={<DeleteOutline />}
-							onClick={bulkDelete}
-							disabled={selectedIds.length === 0}
-							sx={{
-								textTransform: 'none',
-								borderRadius: 2,
-							}}
-						>
-							Delete {selectedIds.length}
-						</Button>
+						<BulkDeleteButton
+							handleBulkDelete={handleBulkDelete}
+							selectedAmount={selectedIds.length}
+						/>
 						<IconButton
 							onClick={toggleMultiSelect}
 							sx={{
@@ -70,5 +61,35 @@ export default function MultiSelector({
 				)}
 			</Box>
 		</Box>
+	)
+}
+
+type BulkDeleteProps = {
+	handleBulkDelete: () => Promise<void>
+	selectedAmount: number
+}
+
+function BulkDeleteButton({ handleBulkDelete, selectedAmount }: BulkDeleteProps) {
+	const [isPending, startTransition] = useTransition()
+
+	return (
+		<Button
+			loading={isPending}
+			onClick={() =>
+				startTransition(async () => {
+					await handleBulkDelete()
+				})
+			}
+			startIcon={<DeleteOutline />}
+			variant="contained"
+			color="error"
+			disabled={selectedAmount === 0}
+			sx={{
+				textTransform: 'none',
+				borderRadius: 2,
+			}}
+		>
+			Delete {selectedAmount}
+		</Button>
 	)
 }

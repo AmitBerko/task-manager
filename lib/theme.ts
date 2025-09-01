@@ -2,7 +2,7 @@
 
 import { createTheme, PaletteOptions } from '@mui/material'
 import { roboto } from './fonts'
-import { ThemeMode } from './types'
+import { ThemeMode } from '../types/types'
 
 const darkPalette: PaletteOptions = {
 	mode: 'dark',
@@ -20,7 +20,7 @@ const darkPalette: PaletteOptions = {
 		primary: '#ffffff',
 		secondary: 'rgba(255, 255, 255, 0.7)',
 	},
-	divider: 'rgba(255, 255, 255, 0.4)',
+	divider: 'rgba(255, 255, 255, 0.2)',
 }
 
 const lightPalette: PaletteOptions = {
@@ -32,14 +32,14 @@ const lightPalette: PaletteOptions = {
 		contrastText: '#fff',
 	},
 	background: {
-		default: '#f4f6f8',
-		paper: '#ffffff', 
+		default: '#f3f4f5',
+		paper: '#fafafa',
 	},
 	text: {
 		primary: 'rgba(0, 0, 0, 0.9)',
 		secondary: 'rgba(0, 0, 0, 0.65)',
 	},
-	divider: 'rgba(0, 0, 0, 0.5)',
+	divider: 'rgba(0, 0, 0, 0.35)',
 }
 
 export const createAppTheme = (mode: ThemeMode) => {

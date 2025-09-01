@@ -1,18 +1,15 @@
 'use client'
 
-import { useCallback, useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { Stack } from '@mui/material'
 import ActionsBar from './ActionsBar'
 import TaskList from './TaskList/TaskList'
-import { Filter, Task } from '@/lib/types'
-import TaskDialog from './TaskDialog'
-import { useTasks } from '@/contexts/TasksProvider'
+import { Filter } from '@/types/types'
+import { DialogProvider } from '@/contexts/DialogProvider'
+import { Task } from '@prisma/client'
 
-export default function TasksManager() {
-	const [isDialogOpen, setIsDialogOpen] = useState(false)
-	const [taskToEdit, setTaskToEdit] = useState<Task | null>(null)
+export default function TasksManager({ tasks }: { tasks: Task[] }) {
 	const [filter, setFilter] = useState<Filter>({ search: '', priority: 'All' })
-	const { tasks } = useTasks()
 
 	const filteredTasks = useMemo(() => {
 		let filtered = tasks
@@ -35,26 +32,12 @@ export default function TasksManager() {
 		return filtered
 	}, [tasks, filter])
 
-	const openAddDialog = useCallback(() => {
-		setTaskToEdit(null)
-		setIsDialogOpen(true)
-	}, [])
-
-	const openEditDialog = useCallback((task: Task) => {
-		setTaskToEdit(task)
-		setIsDialogOpen(true)
-	}, [])
-
-	const closeDialog = useCallback(() => {
-		setIsDialogOpen(false)
-		setTaskToEdit(null)
-	}, [])
-
 	return (
-		<Stack spacing={2} sx={{ width: '100%', flex: 1, minHeight: 0 }}>
-			<ActionsBar openAddDialog={openAddDialog} filter={filter} setFilter={setFilter} />
-			<TaskList tasks={filteredTasks} openEditDialog={openEditDialog} />
-			<TaskDialog open={isDialogOpen} onClose={closeDialog} taskToEdit={taskToEdit} />
-		</Stack>
+		<DialogProvider>
+			<Stack spacing={2} sx={{ width: '100%', flex: 1, minHeight: 0 }}>
+				<ActionsBar filter={filter} setFilter={setFilter} />
+				<TaskList tasks={filteredTasks} />
+			</Stack>
+		</DialogProvider>
 	)
 }

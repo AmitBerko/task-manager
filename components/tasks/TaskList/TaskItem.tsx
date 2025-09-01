@@ -1,29 +1,25 @@
-import { Typography, IconButton, Checkbox, Box } from '@mui/material'
-import { Priority, Task } from '@/lib/types'
-import { memo } from 'react'
-import { PriorityCircle } from '../../common/PriorityCircle'
+import { memo, useTransition } from 'react'
+import { Typography, IconButton, Checkbox, Box, CircularProgress } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-import Wrapper from '@/components/common/Wrapper'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import { Task, Priority } from '@prisma/client'
+import { PriorityCircle } from '@/components/ui/PriorityCircle'
+import { Wrapper } from '@/components/ui/Wrapper'
+import { deleteTask } from '@/lib/actions/tasks'
+import { useDialog } from '@/contexts/DialogProvider'
 
 type Props = {
 	task: Task
 	handleSelect: (id: string, isChecked: boolean) => void
-	handleDelete: (id: string) => void
-	openEditDialog: (task: Task) => void
 	isMultiSelect: boolean
 }
 
-export default memo(function TaskItem({
-	task: { id, title, description, priority, createdAt },
-	isMultiSelect,
-	handleSelect,
-	handleDelete,
-	openEditDialog,
-}: Props) {
+export default memo(function TaskItem({ task, isMultiSelect, handleSelect }: Props) {
+	const { openDialog } = useDialog()
+	const { id, priority, title, description, createdAt } = task
 	return (
-		<Wrapper styles={{ p: 2 }}>
+		<Wrapper sx={{ p: 2 }}>
 			<Box display="flex" width="100%" alignItems="flex-start">
 				{isMultiSelect && (
 					<Checkbox
@@ -49,21 +45,36 @@ export default memo(function TaskItem({
 				</Box>
 				{!isMultiSelect && (
 					<Box display="flex" alignItems="center" gap={1}>
-						<IconButton
-							onClick={() => openEditDialog({ id, title, description, priority, createdAt })}
-							size="small"
-						>
+						<IconButton onClick={() => openDialog({ mode: 'Edit', task })} size="small">
 							<EditIcon color="secondary" />
 						</IconButton>
-						<IconButton onClick={() => handleDelete(id)} size="small">
-							<DeleteIcon color="secondary" />
-						</IconButton>
+						<DeleteButton deleteTask={() => deleteTask(id)} />
 					</Box>
 				)}
 			</Box>
 		</Wrapper>
 	)
 })
+
+function DeleteButton({ deleteTask }: { deleteTask: () => Promise<void> }) {
+	const [isPending, startTransition] = useTransition()
+
+	return (
+		<IconButton
+			onClick={() => {
+				startTransition(async () => deleteTask())
+			}}
+			disabled={isPending}
+			size="small"
+		>
+			{isPending ? (
+				<CircularProgress color="secondary" size={24} thickness={5} />
+			) : (
+				<DeleteIcon color="secondary" />
+			)}
+		</IconButton>
+	)
+}
 
 function TaskFooter({ priority, createdAt }: { priority: Priority; createdAt: Date }) {
 	return (
