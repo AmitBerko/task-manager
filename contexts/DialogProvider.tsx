@@ -1,6 +1,6 @@
 'use client'
 
-import TaskDialog from '@/components/tasks/TaskDialog'
+import TaskDialog from '@/components/tasks/TaskDialog/TaskDialog'
 import { Task } from '@prisma/client';
 import { createContext, useContext, useState, type ReactNode } from 'react'
 

@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { Stack } from '@mui/material'
-import ActionsBar from './ActionsBar'
+import ActionsBar from './ActionsBar/ActionsBar'
 import TaskList from './TaskList/TaskList'
 import { Filter } from '@/types/types'
 import { DialogProvider } from '@/contexts/DialogProvider'
