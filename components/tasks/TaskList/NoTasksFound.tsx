@@ -14,7 +14,9 @@ export default function NoTasksFound() {
 		>
 			<SearchOffIcon sx={{ fontSize: 48, mb: 2 }} />
 			<Typography variant="h6">No tasks to show</Typography>
-			<Typography variant="body2" textAlign="center">Try removing existing filters or adding a new task</Typography>
+			<Typography variant="body2" textAlign="center">
+				Try removing existing filters or adding a new task
+			</Typography>
 		</Box>
 	)
 }
