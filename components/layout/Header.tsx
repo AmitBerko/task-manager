@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material'
 import React from 'react'
 import ThemeToggle from './ThemeToggle'
 import Signout from './Signout'
+import { labels } from '@/config/labels'
 
 export default function Header() {
 	return (
@@ -25,7 +26,7 @@ export default function Header() {
 						textAlign: 'center',
 					}}
 				>
-					Task Manager
+					{labels.general.appTitle}
 				</Typography>
 			</Box>
 			<ThemeToggle />

@@ -6,6 +6,8 @@ import { Search as SearchIcon, FilterAltOutlined as FilterIcon } from '@mui/icon
 import { Wrapper } from '@/components/ui/Wrapper'
 import { Filter, PriorityFilter } from '@/types/types'
 import { useDialog } from '@/contexts/DialogProvider'
+import { Priority } from '@prisma/client'
+import { labels } from '@/config/labels'
 
 type Props = {
 	filter: Filter
@@ -57,10 +59,12 @@ export default function ActionsBar({ filter, setFilter }: Props) {
 								)
 							}}
 						>
-							<MenuItem value="All">All</MenuItem>
-							<MenuItem value="High">High</MenuItem>
-							<MenuItem value="Medium">Medium</MenuItem>
-							<MenuItem value="Low">Low</MenuItem>
+							<MenuItem value={'All'}>All</MenuItem>
+							{Object.values(Priority).map((priority) => (
+								<MenuItem key={priority} value={priority}>
+									{priority}
+								</MenuItem>
+							))}
 						</Select>
 					</FormControl>
 				</Grid>
@@ -72,7 +76,7 @@ export default function ActionsBar({ filter, setFilter }: Props) {
 						size="small"
 						fullWidth
 					>
-						Add Task
+						{labels.tasks.addTask}
 					</Button>
 				</Grid>
 			</Grid>

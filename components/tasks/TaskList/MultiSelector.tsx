@@ -1,3 +1,4 @@
+import { labels } from '@/config/labels'
 import { bulkDeleteTasks } from '@/lib/actions/tasks'
 import { DeleteOutline, Deselect, SelectAll } from '@mui/icons-material'
 import { Box, Button, IconButton, Typography } from '@mui/material'
@@ -30,7 +31,7 @@ export default function MultiSelector({ isMultiSelect, selectedIds, toggleMultiS
 					fontWeight: 'bold',
 				}}
 			>
-				My Tasks
+				{labels.tasks.myTasks}
 			</Typography>
 
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

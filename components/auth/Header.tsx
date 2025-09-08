@@ -1,7 +1,10 @@
+import { labels } from '@/config/labels'
 import { Box, Typography } from '@mui/material'
 import React from 'react'
 
 export default function Header({ isLogin }: { isLogin: boolean }) {
+	const { signIn, register, headerSubtitle } = labels.authForm
+
 	return (
 		<Box sx={{ textAlign: 'center', mb: 4 }}>
 			<Typography
@@ -12,7 +15,7 @@ export default function Header({ isLogin }: { isLogin: boolean }) {
 					fontSize: { xs: '1.65rem', sm: '1.9rem' },
 				}}
 			>
-				Task Manager
+				{labels.general.appTitle}
 			</Typography>
 			<Typography
 				variant="body2"
@@ -21,7 +24,7 @@ export default function Header({ isLogin }: { isLogin: boolean }) {
 					fontSize: '0.9rem',
 				}}
 			>
-				{isLogin ? 'Sign in' : 'Register'} to track your tasks
+				{isLogin ? signIn : register} {headerSubtitle}
 			</Typography>
 		</Box>
 	)

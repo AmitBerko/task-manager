@@ -1,8 +1,11 @@
+import { labels } from '@/config/labels'
 import { Box, Typography } from '@mui/material'
 import Link from 'next/link'
 import React from 'react'
 
 export default function Footer({ isLogin }: { isLogin: boolean }) {
+	const { signIn, register, noAccount, yesAccount } = labels.authForm
+
 	return (
 		<Box sx={{ textAlign: 'center', mt: 4, pt: 3, borderTop: '1px solid', borderColor: 'divider' }}>
 			<Typography
@@ -12,7 +15,7 @@ export default function Footer({ isLogin }: { isLogin: boolean }) {
 					fontSize: '0.85rem',
 				}}
 			>
-				{isLogin ? "Don't have an account? " : 'Already have an account? '}
+				{isLogin ? noAccount : yesAccount}{' '}
 				<Link style={{ textDecoration: 'none' }} href={isLogin ? '/register' : '/login'}>
 					<Typography
 						component="span"
@@ -23,7 +26,7 @@ export default function Footer({ isLogin }: { isLogin: boolean }) {
 							'&:hover': { textDecoration: 'underline' },
 						}}
 					>
-						{isLogin ? 'Sign up' : 'Sign in'}
+						{isLogin ? register : signIn}
 					</Typography>
 				</Link>
 			</Typography>

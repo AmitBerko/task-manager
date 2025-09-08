@@ -2,10 +2,11 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 import type { Metadata } from 'next'
 import Providers from './Providers'
 import './globals.css'
+import { labels } from '@/config/labels'
 
 export const metadata: Metadata = {
-	title: 'Task Manager',
-	description: 'פרויקט חפיפה :)',
+	title: labels.general.appTitle,
+	description: labels.general.metadataDescription,
 }
 
 export default function RootLayout({

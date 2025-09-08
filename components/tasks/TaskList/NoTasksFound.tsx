@@ -1,7 +1,9 @@
 import { Box, Typography } from '@mui/material'
 import SearchOffIcon from '@mui/icons-material/SearchOff'
+import { labels } from '@/config/labels'
 
 export default function NoTasksFound() {
+	const { noTasksToShow, noTasksHint } = labels.tasks
 	return (
 		<Box
 			sx={{
@@ -13,9 +15,9 @@ export default function NoTasksFound() {
 			}}
 		>
 			<SearchOffIcon sx={{ fontSize: 48, mb: 2 }} />
-			<Typography variant="h6">No tasks to show</Typography>
+			<Typography variant="h6">{noTasksToShow}</Typography>
 			<Typography variant="body2" textAlign="center">
-				Try removing existing filters or adding a new task
+				{noTasksHint}
 			</Typography>
 		</Box>
 	)

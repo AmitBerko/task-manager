@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import { Wrapper } from '../ui/Wrapper'
 import Header from './Header'
 import Footer from './Footer'
+import { labels } from '@/config/labels'
 
 type Props = {
 	mode: 'login' | 'register'
@@ -141,7 +142,7 @@ export default function AuthForm({ mode }: Props) {
 						mt: 1,
 					}}
 				>
-					{isLogin ? 'Sign in' : 'Create account'}
+					{isLogin ? labels.authForm.signIn : labels.authForm.register}
 				</Button>
 			</Box>
 

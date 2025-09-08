@@ -24,6 +24,7 @@ import { useDialog } from '@/contexts/DialogProvider'
 import { useFormik } from 'formik'
 import { TaskPayload } from '@/types/types'
 import { taskSchema } from '@/lib/validations'
+import { Priority } from '@prisma/client'
 
 export default function TaskDialog() {
 	const { isDialogOpen, dialogOptions, closeDialog } = useDialog()
@@ -130,24 +131,14 @@ export default function TaskDialog() {
 								label="Priority Level"
 								onChange={formik.handleChange}
 							>
-								<MenuItem value="High">
-									<Box display="flex" alignItems="center" gap={1}>
-										<PriorityCircle priority="High" />
-										<Typography>High Priority</Typography>
-									</Box>
-								</MenuItem>
-								<MenuItem value="Medium">
-									<Box display="flex" alignItems="center" gap={1}>
-										<PriorityCircle priority="Medium" />
-										<Typography>Medium Priority</Typography>
-									</Box>
-								</MenuItem>
-								<MenuItem value="Low">
-									<Box display="flex" alignItems="center" gap={1}>
-										<PriorityCircle priority="Low" />
-										<Typography>Low Priority</Typography>
-									</Box>
-								</MenuItem>
+								{Object.values(Priority).map((priority) => (
+									<MenuItem value={priority}>
+										<Box display="flex" alignItems="center" gap={1}>
+											<PriorityCircle priority={priority} />
+											<Typography>{priority} Priority</Typography>
+										</Box>
+									</MenuItem>
+								))}
 							</Select>
 						</FormControl>
 					</Stack>
