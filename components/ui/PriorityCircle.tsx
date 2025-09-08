@@ -11,7 +11,7 @@ export function PriorityCircle({ priority }: { priority: Priority }) {
       case 'Low':
         return '#22c55e'
       default:
-        return '#6b7280' // Fallback
+        return '#6b7280'
     }
   }
 

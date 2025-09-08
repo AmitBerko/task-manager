@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React, { useCallback, useState } from 'react'
 import TaskItem from './TaskItem'
@@ -15,7 +15,6 @@ function TaskList({ tasks }: Props) {
 	const [selectedIds, setSelectedIds] = useState<string[]>([])
 	const [isMultiSelect, setIsMultiSelect] = useState(false)
 
-	// Exact same function is passed to every task item so usecallback should be used
 	const handleSelect = useCallback((id: string, isChecked: boolean) => {
 		setSelectedIds((prev) => (isChecked ? [...prev, id] : prev.filter((i) => i !== id)))
 	}, [])

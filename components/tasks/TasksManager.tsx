@@ -14,12 +14,10 @@ export default function TasksManager({ tasks }: { tasks: Task[] }) {
 	const filteredTasks = useMemo(() => {
 		let filtered = tasks
 
-		// Filter by priority
 		if (filter.priority !== 'All') {
 			filtered = filtered.filter((task) => task.priority === filter.priority)
 		}
 
-		// Filter by title and description
 		if (filter.search.trim()) {
 			const searchTerm = filter.search.toLowerCase().trim()
 			filtered = filtered.filter(

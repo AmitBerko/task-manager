@@ -1,14 +1,15 @@
 'use client'
 
 import React from 'react'
-import { Box, Typography, TextField, Button, CircularProgress } from '@mui/material'
+import { Box, TextField, Button, CircularProgress } from '@mui/material'
 import { useFormik } from 'formik'
 import { loginSchema, registerSchema } from '@/lib/validations'
 import { register } from '@/lib/actions/auth'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Wrapper } from '../ui/Wrapper'
-import Link from 'next/link'
+import Header from './Header'
+import Footer from './Footer'
 
 type Props = {
 	mode: 'login' | 'register'
@@ -46,7 +47,6 @@ export default function AuthForm({ mode }: Props) {
 				}
 				const { email, confirmPassword, password } = values
 
-				// Login right after registering
 				const loginResponse = await signIn('credentials', {
 					redirect: false,
 					email,
@@ -73,30 +73,8 @@ export default function AuthForm({ mode }: Props) {
 					`0 20px 40px rgba(0, 0, 0, ${theme.palette.mode === 'dark' ? '0.4' : '0.1'})`,
 			}}
 		>
-			{/* Header */}
-			<Box sx={{ textAlign: 'center', mb: 4 }}>
-				<Typography
-					variant="h4"
-					sx={{
-						fontWeight: 'bold',
-						mb: 1,
-						fontSize: { xs: '1.65rem', sm: '1.9rem' },
-					}}
-				>
-					Task Manager
-				</Typography>
-				<Typography
-					variant="body2"
-					sx={{
-						color: 'text.secondary',
-						fontSize: '0.9rem',
-					}}
-				>
-					{isLogin ? 'Sign in' : 'Register'} to track your tasks
-				</Typography>
-			</Box>
+			<Header isLogin={isLogin} />
 
-			{/* Form */}
 			<Box
 				component="form"
 				onSubmit={formik.handleSubmit}
@@ -167,32 +145,7 @@ export default function AuthForm({ mode }: Props) {
 				</Button>
 			</Box>
 
-			<Box
-				sx={{ textAlign: 'center', mt: 4, pt: 3, borderTop: '1px solid', borderColor: 'divider' }}
-			>
-				<Typography
-					variant="body2"
-					sx={{
-						color: 'text.secondary',
-						fontSize: '0.85rem',
-					}}
-				>
-					{isLogin ? "Don't have an account? " : 'Already have an account? '}
-					<Link style={{ textDecoration: 'none' }} href={isLogin ? '/register' : '/login'}>
-						<Typography
-							component="span"
-							sx={{
-								color: 'primary.main',
-								textDecoration: 'none',
-								fontWeight: 'bold',
-								'&:hover': { textDecoration: 'underline' },
-							}}
-						>
-							{isLogin ? 'Sign up' : 'Sign in'}
-						</Typography>
-					</Link>
-				</Typography>
-			</Box>
+			<Footer isLogin={isLogin} />
 		</Wrapper>
 	)
 }

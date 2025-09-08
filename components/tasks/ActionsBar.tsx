@@ -25,7 +25,6 @@ export default function ActionsBar({ filter, setFilter }: Props) {
 	return (
 		<Wrapper sx={{ p: { xs: 2, sm: 3 } }}>
 			<Grid container spacing={2} sx={{ width: '100%', alignItems: 'stretch' }}>
-				{/* Search Input */}
 				<Grid size={{ xs: 12, sm: 5.5 }}>
 					<TextField
 						fullWidth
@@ -38,7 +37,6 @@ export default function ActionsBar({ filter, setFilter }: Props) {
 					/>
 				</Grid>
 
-				{/* Filter By Priority */}
 				<Grid minWidth={135}>
 					<FormControl fullWidth size="small">
 						<Select
@@ -50,7 +48,6 @@ export default function ActionsBar({ filter, setFilter }: Props) {
 								display: 'flex',
 								alignItems: 'center',
 							}}
-							// Used this to insert the Filter icon
 							renderValue={(value) => {
 								return (
 									<Box sx={{ display: 'flex', gap: 1 }}>
@@ -68,7 +65,6 @@ export default function ActionsBar({ filter, setFilter }: Props) {
 					</FormControl>
 				</Grid>
 
-				{/* Add Task Button */}
 				<Grid size="grow" display="flex">
 					<Button
 						onClick={() => openDialog({ mode: 'Create' })}

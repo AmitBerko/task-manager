@@ -44,29 +44,18 @@ export default function TaskDialog() {
 		enableReinitialize: true,
 		onSubmit: async ({ title, description, priority }) => {
 			if (isEditing) {
-				const response = await updateTask({
+				await updateTask({
 					taskId: dialogOptions.task.id,
 					title,
 					description,
 					priority,
 				})
-
-				if (response.success) {
-					console.log('Added task: ', response.data)
-				} else {
-					console.log('Error is: ', response.error)
-				}
 			} else {
-				const response = await addTask({
+				await addTask({
 					title,
 					description,
 					priority,
 				})
-				if (response.success) {
-					console.log('Updated task: ', response.data)
-				} else {
-					console.log('Error is: ', response.error)
-				}
 			}
 
 			closeDialog()
