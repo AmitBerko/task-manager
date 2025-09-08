@@ -1,12 +1,10 @@
 'use client'
 
-import { Box, Button, FormControl, Grid, MenuItem, Select, TextField } from '@mui/material'
+import { Button, Grid } from '@mui/material'
 import React from 'react'
-import { Search as SearchIcon, FilterAltOutlined as FilterIcon } from '@mui/icons-material'
 import { Wrapper } from '@/components/ui/Wrapper'
 import { Filter, PriorityFilter } from '@/types/types'
 import { useDialog } from '@/contexts/DialogProvider'
-import { Priority } from '@prisma/client'
 import { labels } from '@/config/labels'
 import FilterByPriority from './FilterByPriority'
 import FilterBySearch from './FilterBySearch'
