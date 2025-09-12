@@ -11,6 +11,7 @@ import { Wrapper } from '../ui/Wrapper'
 import Header from './Header'
 import Footer from './Footer'
 import { labels } from '@/config/labels'
+import { logger } from '@/utils/logger'
 
 type Props = {
 	mode: 'login' | 'register'
@@ -27,7 +28,6 @@ export default function AuthForm({ mode }: Props) {
 			confirmPassword: '',
 		},
 		onSubmit: async (values, { setErrors }) => {
-			console.log('testtttt', values)
 			if (isLogin) {
 				const { email, password } = values
 				const response = await signIn('credentials', {

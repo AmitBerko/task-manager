@@ -22,6 +22,7 @@ import { TaskPayload } from '@/types/types'
 import { taskSchema } from '@/lib/validations'
 import { Priority } from '@prisma/client'
 import { labels } from '@/config/labels'
+import { logger } from '@/utils/logger'
 
 export default function TaskForm() {
 	const { dialogOptions, closeDialog } = useDialog()
@@ -42,18 +43,26 @@ export default function TaskForm() {
 		enableReinitialize: true,
 		onSubmit: async ({ title, description, priority }) => {
 			if (isEditing) {
-				await updateTask({
+				const response = await updateTask({
 					taskId: dialogOptions.task.id,
 					title,
 					description,
 					priority,
 				})
+
+				if (!response.success) {
+					logger(`Edit task failed: ${response.error}`)
+				}
 			} else {
-				await addTask({
+				const response = await addTask({
 					title,
 					description,
 					priority,
 				})
+
+				if (!response.success) {
+					logger(`Add task failed: ${response.error}`)
+				}
 			}
 
 			closeDialog()
