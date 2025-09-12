@@ -15,5 +15,7 @@ export const labels = {
 		noTasksToShow: 'No tasks to show',
 		noTasksHint: 'Try removing existing filters or adding a new task',
 		addTask: 'Add Task',
+		updateTask: 'Update Task',
+		createTask: 'Create Task',
 	},
 } as const

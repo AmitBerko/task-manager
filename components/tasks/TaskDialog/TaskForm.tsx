@@ -21,6 +21,7 @@ import { FormikProps, useFormik } from 'formik'
 import { TaskPayload } from '@/types/types'
 import { taskSchema } from '@/lib/validations'
 import { Priority } from '@prisma/client'
+import { labels } from '@/config/labels'
 
 export default function TaskForm() {
 	const { dialogOptions, closeDialog } = useDialog()
@@ -94,7 +95,7 @@ export default function TaskForm() {
 						width: '150px',
 					}}
 				>
-					{isEditing ? 'Update Task' : 'Create Task'}
+					{isEditing ? labels.tasks.updateTask : labels.tasks.createTask}
 				</Button>
 			</DialogActions>
 		</form>

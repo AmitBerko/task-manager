@@ -3,6 +3,7 @@ import { Dialog, DialogTitle, Typography, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { useDialog } from '@/contexts/DialogProvider'
 import TaskForm from './TaskForm'
+import { labels } from '@/config/labels'
 
 export default function TaskDialog() {
 	const { isDialogOpen, dialogOptions, closeDialog } = useDialog()
@@ -33,7 +34,7 @@ export default function TaskDialog() {
 				}}
 			>
 				<Typography variant="h6" fontWeight="bold">
-					{isEditing ? 'Edit Task' : 'Create New Task'}
+					{isEditing ? labels.tasks.updateTask : labels.tasks.createTask}
 				</Typography>
 				<IconButton onClick={closeDialog} size="small">
 					<CloseIcon />
