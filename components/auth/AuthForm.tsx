@@ -11,7 +11,6 @@ import { Wrapper } from '../ui/Wrapper'
 import Header from './Header'
 import Footer from './Footer'
 import { labels } from '@/config/labels'
-import { logger } from '@/utils/logger'
 
 type Props = {
 	mode: 'login' | 'register'
