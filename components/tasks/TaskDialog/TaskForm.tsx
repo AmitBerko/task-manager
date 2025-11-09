@@ -22,7 +22,7 @@ import { TaskPayload } from '@/types/types'
 import { taskSchema } from '@/lib/validations'
 import { Priority } from '@prisma/client'
 import { labels } from '@/config/labels'
-import { logger } from '@/utils/logger'
+import { Logger } from '@/utils/logger'
 
 export default function TaskForm() {
 	const { dialogOptions, closeDialog } = useDialog()
@@ -51,7 +51,8 @@ export default function TaskForm() {
 				})
 
 				if (!response.success) {
-					logger(`Edit task failed: ${response.error}`)
+					Logger.instance.log(`Edit task failed: ${response.error}`)
+          console.log('here?')
 				}
 			} else {
 				const response = await addTask({
@@ -61,7 +62,7 @@ export default function TaskForm() {
 				})
 
 				if (!response.success) {
-					logger(`Add task failed: ${response.error}`)
+					Logger.instance.log(`Add task failed: ${response.error}`)
 				}
 			}
 
