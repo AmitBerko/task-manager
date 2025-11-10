@@ -2,7 +2,7 @@
 import createAppTheme from '@/lib/theme'
 import { ThemeMode } from '@/types/types'
 import { CssBaseline, ThemeProvider } from '@mui/material'
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 
 type ThemeContextType = {
 	mode: ThemeMode
@@ -12,10 +12,21 @@ type ThemeContextType = {
 const ThemeModeContext = createContext<ThemeContextType | null>(null)
 function ThemeModeProvider({ children }: { children: ReactNode }) {
 	const [mode, setMode] = useState<ThemeMode>('dark')
+	const [didHydrate, setDidHydrate] = useState(false)
 
 	const toggleThemeMode = () => {
-		setMode((prevMode) => (prevMode === 'dark' ? 'light' : 'dark'))
+		setMode((prevMode) => {
+			const newMode = prevMode === 'dark' ? 'light' : 'dark'
+			localStorage.setItem('mode', newMode)
+			return newMode
+		})
 	}
+
+	useEffect(() => {
+		const previousMode = localStorage.getItem('mode')
+		setMode(previousMode === 'light' ? 'light' : 'dark')
+		setDidHydrate(true)
+	}, [])
 
 	const theme = createAppTheme(mode)
 
@@ -23,7 +34,7 @@ function ThemeModeProvider({ children }: { children: ReactNode }) {
 		<ThemeModeContext.Provider value={{ mode, toggleThemeMode }}>
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				{children}
+				{didHydrate && children}
 			</ThemeProvider>
 		</ThemeModeContext.Provider>
 	)
