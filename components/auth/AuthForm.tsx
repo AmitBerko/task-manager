@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, TextField, Button, CircularProgress } from '@mui/material'
 import { useFormik } from 'formik'
 import { loginSchema, registerSchema } from '@/lib/validations'
@@ -17,6 +17,7 @@ type Props = {
 }
 
 export default function AuthForm({ mode }: Props) {
+  const [isRedirecting, setIsRedirecting] = useState(false)
 	const router = useRouter()
 	const isLogin = mode === 'login'
 
@@ -59,6 +60,7 @@ export default function AuthForm({ mode }: Props) {
 				}
 				router.push('/tasks')
 			}
+      setIsRedirecting(true)
 		},
 		validationSchema: isLogin ? loginSchema : registerSchema,
 	})
@@ -126,11 +128,11 @@ export default function AuthForm({ mode }: Props) {
 				)}
 
 				<Button
-					loading={formik.isSubmitting}
+					loading={formik.isSubmitting || isRedirecting}
 					loadingIndicator={<CircularProgress size={25} thickness={4.5} color="inherit" />}
 					type="submit"
 					variant="contained"
-					disabled={!formik.isValid || formik.isSubmitting}
+					disabled={!formik.isValid || formik.isSubmitting || isRedirecting}
 					fullWidth
 					color="primary"
 					sx={{
